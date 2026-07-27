@@ -6,7 +6,7 @@ import {
     BriefcaseBusiness, Check, CheckCheck, CheckCircle, ChevronDown, Circle, CircleCheck,
     CircleX, Clock3, Download, Eye, EyeOff, FileEdit, FileText, Gauge, Inbox, Info,
     Layers3, LayoutDashboard, LoaderCircle, LockKeyhole, Mail, Maximize2, Menu,
-    MessageCircle, Minus, MoreHorizontal, Palette, Paperclip, PauseCircle, PenTool,
+    LogOut, MessageCircle, Minus, MoreHorizontal, Palette, Paperclip, PauseCircle, PenTool, Plus,
     PlayCircle, RefreshCw, ScanSearch, Search, SearchCheck, ShieldCheck, TextCursorInput,
     TriangleAlert, UploadCloud, UserCheck, Video, X, createIcons,
 } from 'lucide';
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
         BriefcaseBusiness, Check, CheckCheck, CheckCircle, ChevronDown, Circle, CircleCheck,
         CircleX, Clock3, Download, Eye, EyeOff, FileEdit, FileText, Gauge, Inbox, Info,
         Layers3, LayoutDashboard, LoaderCircle, LockKeyhole, Mail, Maximize2, Menu,
-        MessageCircle, Minus, MoreHorizontal, Palette, Paperclip, PauseCircle, PenTool,
+        LogOut, MessageCircle, Minus, MoreHorizontal, Palette, Paperclip, PauseCircle, PenTool, Plus,
         PlayCircle, RefreshCw, ScanSearch, Search, SearchCheck, ShieldCheck, TextCursorInput,
         TriangleAlert, UploadCloud, UserCheck, Video, X,
     } });

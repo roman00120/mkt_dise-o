@@ -83,7 +83,7 @@ class AuthenticationTest extends TestCase
 
         $user = User::factory()->create(['role' => UserRole::MARKETING]);
         $this->actingAs($user)->get(route('admin.dashboard'))->assertForbidden();
-        $this->actingAs($user)->get(route('app.dashboard'))->assertOk()->assertSee('Módulo en construcción');
+        $this->actingAs($user)->get(route('app.dashboard'))->assertOk()->assertSee('Dashboard de Marketing');
     }
 
     public function test_password_recovery_is_generic_for_unknown_email(): void

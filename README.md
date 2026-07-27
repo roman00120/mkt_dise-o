@@ -1,16 +1,12 @@
 # TG Creative Hub
 
-Base inicial de la plataforma **TG Creative Hub — TOTAL GROUND**, preparada durante la Fase 0 con Laravel 12 y Blade.
+Plataforma interna de TG Creative Hub — TOTAL GROUND, construida con Laravel 12, Blade, Vite, Tailwind CSS 4, Alpine.js y el Design System de Total Ground.
 
 ## Requisitos
 
-- PHP 8.2 o superior (entorno actual: PHP 8.3 portable en `C:\tmp\php83`)
-- Composer 2
-- Node.js LTS y npm
-- Git
-- SQLite (incluido mediante la extensión PDO de PHP)
-
-MySQL no es necesario en esta fase; se configurará posteriormente.
+- PHP 8.2 o superior (entorno validado con PHP 8.3 en `C:\tmp\php83`).
+- Composer 2, Node.js LTS, npm y Git.
+- SQLite para las fases iniciales.
 
 ## Instalación
 
@@ -19,54 +15,49 @@ composer install
 npm.cmd install
 copy .env.example .env
 php artisan key:generate
-```
-
-Configura `.env` con `APP_NAME="TG Creative Hub"`, locale `es` y `APP_URL=http://localhost`. No incluyas credenciales reales.
-
-## SQLite y migraciones
-
-La aplicación usa SQLite durante la Fase 0:
-
-```env
-DB_CONNECTION=sqlite
-```
-
-Ejecuta las migraciones con:
-
-```powershell
 php artisan migrate
-php artisan migrate:status
+php artisan db:seed
 ```
+
+No incluyas credenciales reales en el repositorio.
 
 ## Desarrollo
-
-En terminales separadas:
 
 ```powershell
 npm.cmd run dev
 php artisan serve
 ```
 
-La ruta inicial es `GET /` y muestra el estado de instalación de TG Creative Hub.
+La ruta principal de Marketing es `GET /app`. Requiere autenticación, usuario activo y rol `marketing`, `supervisor` o `admin`.
 
-## Tests
+## SQLite y migraciones
+
+```env
+DB_CONNECTION=sqlite
+```
+
+```powershell
+php artisan migrate
+php artisan migrate:status
+```
+
+## Tests y build
 
 ```powershell
 php artisan test
-```
-
-## Build frontend
-
-```powershell
 npm.cmd run build
+vendor/bin/pint --test
+composer validate
+composer audit
 ```
 
-El frontend base utiliza Vite y Tailwind CSS. No se han instalado React, Vue, Bootstrap, jQuery, Breeze ni autenticación.
+## Documentación
 
-## Próximas fases
+- [Fase 1 — Producto y UX](docs/product/README.md)
+- [Fase 2 — Design System](docs/design-system/README.md)
+- [Fase 3 — Autenticación](docs/authentication/README.md)
+- [Fase 4 — Dashboard de Marketing](docs/dashboard-marketing/README.md)
 
-Login, dashboard, solicitudes, paneles, reportes y el Design System quedan fuera de esta Fase 0.
+## Alcance actual
 
-## Documentación de producto
-
-La documentación funcional y de UX de la Fase 1 está disponible en [docs/product/README.md](docs/product/README.md). Incluye arquitectura de información, mapa de pantallas, flujos, estados, permisos, reglas de negocio, notificaciones, auditoría, roadmap y decisiones abiertas.
+La Fase 4 incluye el dashboard de Marketing con datos demostrativos, estados de carga/vacío/error, layout autenticado y rutas placeholder. El wizard real, solicitudes persistentes, panel creativo y panel administrativo quedan para fases posteriores.

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\App\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -13,7 +14,14 @@ Route::get('/design-system', function () {
 })->name('design-system.index');
 
 Route::middleware(['auth', 'active'])->group(function (): void {
-    Route::view('/app', 'placeholders.app')->middleware('role:marketing')->name('app.dashboard');
+    Route::get('/app', DashboardController::class)->middleware('role:marketing,supervisor,admin')->name('app.dashboard');
+    Route::middleware('role:marketing,supervisor,admin')->group(function (): void {
+        Route::view('/app/requests/create', 'placeholders.app-module')->name('app.requests.create');
+        Route::view('/app/requests', 'placeholders.app-module')->name('app.requests.index');
+        Route::view('/app/requests/{request}', 'placeholders.app-module')->name('app.requests.show');
+        Route::view('/app/profile', 'placeholders.app-module')->name('app.profile');
+        Route::view('/app/notifications', 'placeholders.app-module')->name('app.notifications');
+    });
     Route::view('/creative', 'placeholders.creative')->middleware('role:supervisor')->name('creative.dashboard');
     Route::view('/creative/design', 'placeholders.creative')->middleware('role:design')->name('creative.design.dashboard');
     Route::view('/creative/video', 'placeholders.creative')->middleware('role:video')->name('creative.video.dashboard');
