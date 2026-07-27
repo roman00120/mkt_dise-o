@@ -57,6 +57,7 @@ composer audit
 - [Fase 2 — Design System](docs/design-system/README.md)
 - [Fase 3 — Autenticación](docs/authentication/README.md)
 - [Fase 4 — Dashboard de Marketing](docs/dashboard-marketing/README.md)
+- [Fase 5 — Wizard de solicitudes](docs/request-wizard/README.md)
 
 ## Alcance actual
 

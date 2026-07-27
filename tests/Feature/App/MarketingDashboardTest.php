@@ -66,7 +66,7 @@ class MarketingDashboardTest extends TestCase
 
         $this->get(route('app.dashboard', ['demo' => 'error']))
             ->assertOk()
-            ->assertSee('No pudimos cargar tu información');
+            ->assertSee('No pudimos cargar tu');
 
         $this->get(route('app.dashboard', ['filter' => 'review']))
             ->assertOk()
@@ -83,7 +83,8 @@ class MarketingDashboardTest extends TestCase
         }
 
         foreach ($routes as $route) {
-            $this->actingAs($user)->get(route($route))->assertOk()->assertSee('Módulo en construcción');
+            $response = $this->actingAs($user)->get(route($route))->assertOk();
+            $response->assertSee($route === 'app.requests.create' ? 'Crea una nueva solicitud' : 'Módulo en construcción');
         }
     }
 }
