@@ -1,0 +1,4 @@
+<x-guest-layout title="Confirmar contraseña">
+    <div class="mb-8"><p class="text-xs font-bold uppercase tracking-[.16em] text-red-300">Verificación adicional</p><h1 class="mt-3 text-3xl font-bold tracking-tight">Confirma tu contraseña</h1><p class="mt-2 text-sm leading-6 text-[var(--color-text-secondary)]">Por seguridad, vuelve a ingresar tu contraseña para continuar.</p></div>
+    <form method="POST" action="{{ route('password.confirm.store') }}" class="space-y-5">@csrf<x-auth.password-field :error="$errors->first('password')" /><x-ui.button type="submit" class="w-full" size="lg">Confirmar</x-ui.button></form><a href="{{ url()->previous() }}" class="mt-6 inline-flex min-h-11 items-center text-sm font-semibold text-[var(--color-text-secondary)] hover:text-white">Cancelar</a>
+</x-guest-layout>
