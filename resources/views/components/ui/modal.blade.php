@@ -1,0 +1,4 @@
+@props(['name' => 'modal', 'title' => 'Confirmar acción', 'size' => 'md'])
+<div x-data="{ open: false }" x-on:open-modal.window="if ($event.detail === '{{ $name }}') open = true" x-on:keydown.escape.window="open = false" x-show="open" x-cloak class="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="{{ $name }}-title">
+    <div class="absolute inset-0 bg-black/70" @click="open = false"></div><div class="relative z-10 w-full {{ $size === 'sm' ? 'max-w-sm' : ($size === 'lg' ? 'max-w-2xl' : 'max-w-lg') }} rounded-[var(--radius-modal)] border border-[var(--color-border-default)] bg-[var(--color-surface-elevated)] p-6 shadow-[var(--shadow-lg)]"><div class="flex items-start justify-between gap-4"><h2 id="{{ $name }}-title" class="text-lg font-semibold">{{ $title }}</h2><x-ui.icon-button label="Cerrar" icon="x" @click="open = false" /></div><div class="mt-5">{{ $slot }}</div></div>
+</div>

@@ -1,0 +1,2 @@
+@props(['label' => null, 'hint' => null, 'required' => false])
+<div class="space-y-2"><label class="block text-sm font-medium">{{ $label }} @if($required)<span class="text-red-300">*</span>@endif</label><select {{ $attributes->merge(['class' => 'min-h-11 w-full rounded-[var(--radius-md)] border border-[var(--color-border-default)] bg-[var(--color-bg-secondary)] px-3 text-sm text-white focus:border-[var(--color-action-primary)]']) }} @required($required)>{{ $slot }}</select>@if($hint)<p class="text-xs text-[var(--color-text-tertiary)]">{{ $hint }}</p>@endif</div>

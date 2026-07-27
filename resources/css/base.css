@@ -1,0 +1,9 @@
+@layer base {
+    :root { font-family: var(--font-family-sans); color-scheme: dark; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--color-bg-primary); color: var(--color-text-primary); }
+    ::selection { background: var(--color-action-soft); color: var(--color-text-primary); }
+    :focus-visible { outline: 2px solid var(--color-focus-ring); outline-offset: 3px; }
+    button, a, input, select, textarea { transition: border-color var(--motion-fast) var(--motion-ease), background-color var(--motion-fast) var(--motion-ease), color var(--motion-fast) var(--motion-ease), box-shadow var(--motion-fast) var(--motion-ease), opacity var(--motion-fast) var(--motion-ease); }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
+}

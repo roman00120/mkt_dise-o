@@ -1,0 +1,11 @@
+@layer components {
+    .ds-kicker { color: var(--color-text-tertiary); font-size: var(--font-size-caption); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+    .ds-prose { color: var(--color-text-secondary); font-size: var(--font-size-body); line-height: 1.6; }
+    .ds-section { scroll-margin-top: 6rem; }
+    .ds-swatch { min-height: 5rem; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); }
+    .ds-code { border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm); background: var(--color-bg-secondary); color: var(--color-text-secondary); font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; padding: .75rem; }
+    .ds-grid { display: grid; gap: var(--space-4); }
+    .ds-scroll-x { overflow-x: auto; }
+    .ui-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
+    .ui-scrollbar::-webkit-scrollbar-thumb { background: var(--color-border-default); border-radius: var(--radius-pill); }
+}
