@@ -66,3 +66,7 @@ El frontend base utiliza Vite y Tailwind CSS. No se han instalado React, Vue, Bo
 ## Próximas fases
 
 Login, dashboard, solicitudes, paneles, reportes y el Design System quedan fuera de esta Fase 0.
+
+## Documentación de producto
+
+La documentación funcional y de UX de la Fase 1 está disponible en [docs/product/README.md](docs/product/README.md). Incluye arquitectura de información, mapa de pantallas, flujos, estados, permisos, reglas de negocio, notificaciones, auditoría, roadmap y decisiones abiertas.
