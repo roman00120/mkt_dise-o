@@ -5,6 +5,7 @@ namespace App\Services\Requests;
 use App\Enums\RequestStatus;
 use App\Models\CreativeRequest;
 use App\Models\User;
+use App\Notifications\CreativeRequestAssignedNotification;
 use App\Services\Analytics\StatusPeriodService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -52,7 +53,7 @@ class RequestTransitionService
             // Send Email Notification to Carolina (assignee) when Hugo approves / assigns / moves to in_progress
             if (in_array($to, ['assigned', 'in_progress'], true) && $assignee = $result->assignee) {
                 try {
-                    $assignee->notify(new \App\Notifications\CreativeRequestAssignedNotification($result, $actor));
+                    $assignee->notify(new CreativeRequestAssignedNotification($result, $actor));
                 } catch (\Throwable $e) {
                     logger()->error('Failed sending request assigned notification on transition: '.$e->getMessage());
                 }

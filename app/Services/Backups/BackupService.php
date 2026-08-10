@@ -20,6 +20,6 @@ class BackupService
             app(AuditLogService::class)->record('backup.created', $actor, null, null, ['types' => array_keys($result)]);
         }
 
-return $result;
+        return $result;
     }
 }

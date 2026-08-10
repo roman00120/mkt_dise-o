@@ -33,7 +33,7 @@ class UserController extends Controller
             $access->sendReset($user, $request->user());
         }
 
-return redirect()->route('admin.users.show', $user)->with('status', 'Usuario creado. Se generó un enlace de acceso.');
+        return redirect()->route('admin.users.show', $user)->with('status', 'Usuario creado. Se generó un enlace de acceso.');
     }
 
     public function show(User $user): View

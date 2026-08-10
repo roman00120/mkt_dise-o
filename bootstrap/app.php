@@ -8,6 +8,7 @@ use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Session\TokenMismatchException;
 
 $application = Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -25,7 +26,7 @@ $application = Application::configure(basePath: dirname(__DIR__))
         $middleware->append(RequestCorrelationId::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->render(function (\Illuminate\Session\TokenMismatchException $e, $request) {
+        $exceptions->render(function (TokenMismatchException $e, $request) {
             if ($request->is('logout') || $request->isMethod('POST')) {
                 auth()->logout();
                 $request->session()->invalidate();

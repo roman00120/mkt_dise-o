@@ -7,6 +7,7 @@ use App\Enums\UserRole;
 use App\Enums\UserStatus;
 use App\Models\CreativeRequest;
 use App\Models\User;
+use App\Notifications\CreativeRequestSubmittedNotification;
 use Illuminate\Support\Facades\DB;
 
 class RequestSubmissionService
@@ -25,10 +26,11 @@ class RequestSubmissionService
             $assignee = User::query()
                 ->where('status', UserStatus::ACTIVE)
                 ->get()
-                ->first(function (User $user) use ($serviceRole, $serviceCode) {
+                ->first(function (User $user) use ($serviceRole) {
                     if ($serviceRole && $user->hasRole($serviceRole)) {
                         return true;
                     }
+
                     return $user->hasRole(UserRole::CREATIVE);
                 });
 
@@ -81,13 +83,14 @@ class RequestSubmissionService
                     if ($serviceRole && $user->hasRole($serviceRole)) {
                         return true;
                     }
+
                     return false;
                 })
                 ->unique('id');
 
             foreach ($recipients as $recipient) {
                 try {
-                    $recipient->notify(new \App\Notifications\CreativeRequestSubmittedNotification($freshRequest));
+                    $recipient->notify(new CreativeRequestSubmittedNotification($freshRequest));
                 } catch (\Throwable $e) {
                     logger()->error('Failed sending request submitted notification: '.$e->getMessage());
                 }

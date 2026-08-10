@@ -41,7 +41,7 @@ class KpiDashboardController extends Controller
         $onTimeRequests = (clone $query)->where('status', 'completed')
             ->where(function ($q) {
                 $q->whereNull('required_date')
-                  ->orWhereColumn('completed_at', '<=', 'required_date');
+                    ->orWhereColumn('completed_at', '<=', 'required_date');
             })->count();
 
         $onTimeRate = $completedRequests > 0 ? round(($onTimeRequests / $completedRequests) * 100) : 100;

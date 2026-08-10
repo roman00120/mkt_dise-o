@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CatalogController as AdminCatalogController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\DepartmentController as AdminDepartmentController;
 use App\Http\Controllers\Admin\FailedJobController;
+use App\Http\Controllers\Admin\KpiDashboardController;
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Admin\ReportExportController as AdminReportExportController;
 use App\Http\Controllers\Admin\ReportScheduleController;
@@ -177,7 +178,7 @@ Route::middleware(['auth', 'active', 'password.changed'])->group(function (): vo
     Route::get('/creative/my-metrics', [CreativeReportController::class, 'mine'])->middleware('role:creative,design,video,render')->name('creative.metrics.mine');
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function (): void {
         Route::get('/', AdminDashboardController::class)->name('dashboard');
-        Route::get('/kpis', \App\Http\Controllers\Admin\KpiDashboardController::class)->name('kpis.index');
+        Route::get('/kpis', KpiDashboardController::class)->name('kpis.index');
         Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
         Route::get('/users/create', [AdminUserController::class, 'create'])->name('users.create');
         Route::post('/users', [AdminUserController::class, 'store'])->middleware('throttle:10,1')->name('users.store');

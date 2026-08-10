@@ -20,6 +20,6 @@ class BackupRetentionService
             }
         }
 
-return $removed;
+        return $removed;
     }
 }

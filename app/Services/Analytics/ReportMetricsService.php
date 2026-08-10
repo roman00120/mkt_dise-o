@@ -104,13 +104,13 @@ class ReportMetricsService
             $result[$key] = ['absolute' => $value - $old, 'percent' => $old === 0 ? null : round((($value - $old) / $old) * 100, 1)];
         }
 
-return $result;
+        return $result;
     }
 
     private function bottlenecks(array $statuses): array
     {
         arsort($statuses);
 
-        return array_slice($statuses,0,3,true);
+        return array_slice($statuses, 0, 3, true);
     }
 }

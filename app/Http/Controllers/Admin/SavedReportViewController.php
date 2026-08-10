@@ -39,6 +39,6 @@ class SavedReportViewController extends Controller
         $savedView->delete();
         $audit->record('report_saved_view_deleted', request()->user(), $savedView);
 
-        return back()->with('status','Vista eliminada.');
+        return back()->with('status', 'Vista eliminada.');
     }
 }

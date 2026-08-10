@@ -43,7 +43,7 @@ class StatusPeriodService
             }
         }
 
-return ['periods' => $created, 'inconsistencies' => $inconsistencies];
+        return ['periods' => $created, 'inconsistencies' => $inconsistencies];
     }
 
     private function statusFromEvent(string $event, array $metadata): ?string

@@ -5,6 +5,7 @@ namespace App\Services\Deliverables;
 use App\Enums\DeliverableStatus;
 use App\Models\CreativeRequest;
 use App\Models\User;
+use App\Notifications\CreativeRequestCompletedNotification;
 use App\Services\Notifications\BusinessNotificationService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -27,7 +28,7 @@ class RequestCompletionService
 
             if ($requester = $result->requester) {
                 try {
-                    $requester->notify(new \App\Notifications\CreativeRequestCompletedNotification($result, $actor));
+                    $requester->notify(new CreativeRequestCompletedNotification($result, $actor));
                 } catch (\Throwable $e) {
                     logger()->error('Failed sending request completed notification: '.$e->getMessage());
                 }

@@ -22,6 +22,6 @@ class RestoreService
             File::copy($disk->path($relative), $target);
         }
 
-return ['status' => $dryRun ? 'dry_run' : 'restored', 'target' => 'sqlite'];
+        return ['status' => $dryRun ? 'dry_run' : 'restored', 'target' => 'sqlite'];
     }
 }

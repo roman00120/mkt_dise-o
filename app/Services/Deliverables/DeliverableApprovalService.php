@@ -6,6 +6,7 @@ use App\Enums\DeliverableStatus;
 use App\Enums\DeliverableVersionStatus;
 use App\Models\DeliverableVersion;
 use App\Models\User;
+use App\Notifications\CreativeRequestCompletedNotification;
 use App\Services\Notifications\BusinessNotificationService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -31,7 +32,7 @@ class DeliverableApprovalService
 
             if ($requester = $result->deliverable?->request?->requester) {
                 try {
-                    $requester->notify(new \App\Notifications\CreativeRequestCompletedNotification($result->deliverable->request, $actor));
+                    $requester->notify(new CreativeRequestCompletedNotification($result->deliverable->request, $actor));
                 } catch (\Throwable $e) {
                     logger()->error('Failed sending request completed notification: '.$e->getMessage());
                 }

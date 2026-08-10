@@ -32,7 +32,7 @@ class WizardStepRequest extends FormRequest
             $rules += ['required_date' => ['required', 'date', 'after_or_equal:today'], 'requested_priority' => ['required', Rule::enum(RequestPriority::class)], 'urgency_reason' => ['required_if:requested_priority,urgent', 'nullable', 'string', 'max:1000']];
         }
 
-return $rules;
+        return $rules;
     }
 
     private function specificRules(?string $service): array

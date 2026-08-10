@@ -5,6 +5,7 @@ namespace App\Services\Requests;
 use App\Enums\UserRole;
 use App\Models\CreativeRequest;
 use App\Models\User;
+use App\Notifications\CreativeRequestAssignedNotification;
 use App\Services\Notifications\BusinessNotificationService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -23,7 +24,7 @@ class RequestAssignmentService
             $result = $locked->fresh(['requester', 'assignee']);
 
             try {
-                $assignee->notify(new \App\Notifications\CreativeRequestAssignedNotification($result, $actor));
+                $assignee->notify(new CreativeRequestAssignedNotification($result, $actor));
             } catch (\Throwable $e) {
                 logger()->error('Failed sending request assigned notification: '.$e->getMessage());
             }

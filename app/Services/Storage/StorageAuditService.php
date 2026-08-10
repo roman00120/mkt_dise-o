@@ -17,6 +17,6 @@ class StorageAuditService
             }
         }
 
-return ['files' => count($files), 'missing' => $missing, 'public_private_risk' => is_link(public_path('storage')) && is_dir(storage_path('app/private')) ? false : false];
+        return ['files' => count($files), 'missing' => $missing, 'public_private_risk' => is_link(public_path('storage')) && is_dir(storage_path('app/private')) ? false : false];
     }
 }

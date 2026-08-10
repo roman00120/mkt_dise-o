@@ -66,6 +66,6 @@ class RequestWizardTest extends TestCase
         $draft = CreativeRequest::factory()->create(['requester_id' => $user->id]);
         $this->actingAs($user)->post(route('app.requests.drafts.files.store', $draft), ['file' => UploadedFile::fake()->create('reference.png', 10, 'image/png'), 'category' => 'reference'])->assertSessionHasNoErrors();
         $this->assertDatabaseHas('creative_request_files', ['creative_request_id' => $draft->id, 'category' => 'reference', 'disk' => 'local']);
-        $this->actingAs($user)->post(route('app.requests.drafts.files.store', $draft), ['file' => UploadedFile::fake()->create('malware.exe',10)])->assertSessionHasErrors('file');
+        $this->actingAs($user)->post(route('app.requests.drafts.files.store', $draft), ['file' => UploadedFile::fake()->create('malware.exe', 10)])->assertSessionHasErrors('file');
     }
 }
