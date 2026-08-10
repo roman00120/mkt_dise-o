@@ -18,7 +18,7 @@ jobs:
         options: --health-cmd="mysqladmin ping -h localhost -proot" --health-interval=10s --health-timeout=5s --health-retries=10
     env:
       APP_ENV: testing
-      APP_KEY: base64:eyJ0ZXN0aW5nLWtleS1ub3QtcHJvZHVjdGlvbiI=
+      APP_KEY: '00000000000000000000000000000000'
       DB_CONNECTION: ${{ matrix.database == 'mysql' && 'mysql' || 'sqlite' }}
       DB_DATABASE: ${{ matrix.database == 'mysql' && 'tg_test' || 'database/database.sqlite' }}
       DB_HOST: 127.0.0.1
