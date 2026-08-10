@@ -11,7 +11,7 @@ class FolioGenerator
         $year = (int) now()->year;
 
         return DB::transaction(function () use ($year): string {
-            DB::table('creative_request_sequences')->insertOrIgnore(['year' => $year, 'last_number' => 0, 'created_at' => now(), 'updated_at' => now()]);
+            DB::table('creative_request_sequences')->insertOrIgnore(['year' => $year, 'last_number' => 1042, 'created_at' => now(), 'updated_at' => now()]);
             $sequence = DB::table('creative_request_sequences')->where('year', $year)->lockForUpdate()->first();
             $number = $sequence->last_number + 1;
             DB::table('creative_request_sequences')->where('year', $year)->update(['last_number' => $number, 'updated_at' => now()]);

@@ -25,7 +25,7 @@ class RecommendedDateService
             }
         }
 
-return $date;
+        return $date;
     }
 
     public function isShort(CreativeService|string $service, Carbon|string $date): bool

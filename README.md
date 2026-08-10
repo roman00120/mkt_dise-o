@@ -1,12 +1,12 @@
 # TG Creative Hub
 
-Plataforma interna de TG Creative Hub — TOTAL GROUND, construida con Laravel 12, Blade, Vite, Tailwind CSS 4, Alpine.js y el Design System de Total Ground.
+Plataforma interna de TOTAL GROUND construida con Laravel 12, Blade, Vite y Tailwind CSS.
 
 ## Requisitos
 
 - PHP 8.2 o superior (entorno validado con PHP 8.3 en `C:\tmp\php83`).
 - Composer 2, Node.js LTS, npm y Git.
-- SQLite para las fases iniciales.
+- SQLite para desarrollo y Fase 0. Producción debe usar MySQL.
 
 ## Instalación
 
@@ -16,32 +16,58 @@ npm.cmd install
 copy .env.example .env
 php artisan key:generate
 php artisan migrate
-php artisan db:seed
+npm.cmd run build
 ```
 
-No incluyas credenciales reales en el repositorio.
+No se incluyen credenciales reales ni contraseñas conocidas en el repositorio.
 
-## Desarrollo
+## Usuarios iniciales de producción
+
+`ProductionSeeder` carga únicamente catálogos y departamentos. Para configurar los cuatro usuarios iniciales en staging o producción, define `ADMIN_NAME` y `ADMIN_EMAIL` y ejecuta el flujo interactivo:
+
+```powershell
+php artisan production:users
+```
+
+El comando solicita una contraseña fuerte oculta para cada usuario, exige mínimo 12 caracteres con mayúsculas, minúsculas, números y símbolos, y fuerza el cambio en el primer acceso. Para actualizar usuarios existentes se requiere `--update` y confirmación explícita.
+
+Para crear solo un administrador:
+
+```powershell
+php artisan admin:create
+```
+
+Estos comandos están bloqueados en `local` y solo aceptan `production` o `staging`. No se imprimen ni registran contraseñas.
+
+## Uso de SQLite
+
+Configura en `.env`:
+
+```env
+DB_CONNECTION=sqlite
+```
+
+En Windows, crea `database/database.sqlite` si no existe. No necesitas MySQL para desarrollo local.
+
+## Comandos de desarrollo
 
 ```powershell
 npm.cmd run dev
 php artisan serve
 ```
 
-La ruta principal de Marketing es `GET /app`. Requiere autenticación, usuario activo y rol `marketing`, `supervisor` o `admin`.
+La aplicación queda disponible normalmente en `http://127.0.0.1:8000`.
 
-## SQLite y migraciones
-
-```env
-DB_CONNECTION=sqlite
-```
+## Migraciones
 
 ```powershell
 php artisan migrate
 php artisan migrate:status
 ```
 
-## Tests y build
+Los datos demo solo se cargan si `ENABLE_DEMO_DATA=true` y nunca en staging o producción. `php artisan db:seed` carga primero los catálogos operativos.
+
+## Tests y compilación frontend
 
 ```powershell
 php artisan test
@@ -50,15 +76,3 @@ vendor/bin/pint --test
 composer validate
 composer audit
 ```
-
-## Documentación
-
-- [Fase 1 — Producto y UX](docs/product/README.md)
-- [Fase 2 — Design System](docs/design-system/README.md)
-- [Fase 3 — Autenticación](docs/authentication/README.md)
-- [Fase 4 — Dashboard de Marketing](docs/dashboard-marketing/README.md)
-- [Fase 5 — Wizard de solicitudes](docs/request-wizard/README.md)
-
-## Alcance actual
-
-La Fase 4 incluye el dashboard de Marketing con datos demostrativos, estados de carga/vacío/error, layout autenticado y rutas placeholder. El wizard real, solicitudes persistentes, panel creativo y panel administrativo quedan para fases posteriores.

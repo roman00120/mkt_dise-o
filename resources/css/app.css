@@ -3,6 +3,28 @@
 @import './base.css';
 @import './components.css';
 
+[x-cloak] {
+    display: none !important;
+}
+
+/* Marca completa en las barras laterales de la aplicación. */
+aside a.brand-logo-link > span:first-child {
+    width: 132px !important;
+    height: 40px !important;
+    flex: 0 0 132px;
+    border-radius: 0 !important;
+    background-color: transparent !important;
+    background-image: url('/02-TG-Logo.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    font-size: 0 !important;
+}
+
+aside a.brand-logo-link > span:nth-child(2) {
+    display: none;
+}
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source "../**/*.blade.php";

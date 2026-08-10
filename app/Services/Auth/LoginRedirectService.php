@@ -12,6 +12,7 @@ class LoginRedirectService
         return match ($user->role) {
             UserRole::ADMIN => route('admin.dashboard'),
             UserRole::MARKETING => route('app.dashboard'),
+            UserRole::CREATIVE => route('creative.dashboard'),
             UserRole::DESIGN => route('creative.design.dashboard'),
             UserRole::VIDEO => route('creative.video.dashboard'),
             UserRole::RENDER => route('creative.render.dashboard'),

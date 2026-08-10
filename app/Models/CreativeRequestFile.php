@@ -15,4 +15,9 @@ class CreativeRequestFile extends Model
     {
         return $this->belongsTo(CreativeRequest::class, 'creative_request_id');
     }
+
+    public function uploader()
+    {
+        return $this->belongsTo(User::class, 'uploaded_by');
+    }
 }

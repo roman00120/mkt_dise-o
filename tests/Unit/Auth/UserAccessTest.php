@@ -13,8 +13,9 @@ class UserAccessTest extends TestCase
     public function test_enums_expose_only_defined_roles_and_statuses(): void
     {
         self::assertSame('admin', UserRole::ADMIN->value);
+        self::assertSame('creative', UserRole::CREATIVE->value);
         self::assertSame('active', UserStatus::ACTIVE->value);
-        self::assertCount(6, UserRole::cases());
+        self::assertCount(7, UserRole::cases());
         self::assertCount(3, UserStatus::cases());
     }
 

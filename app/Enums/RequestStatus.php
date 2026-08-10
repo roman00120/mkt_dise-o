@@ -21,7 +21,7 @@ enum RequestStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::DRAFT => 'Borrador', self::PENDING => 'Pendiente', default => str($this->value)->replace('_', ' ')->title()->toString()
+            self::DRAFT => 'Borrador', self::PENDING => 'Pendiente', self::IN_VALIDATION => 'En validación', self::ASSIGNED => 'Asignada', self::IN_PROGRESS => 'En proceso', self::WAITING_FOR_INFORMATION => 'En espera de información', self::INTERNAL_REVIEW => 'En revisión interna', self::MARKETING_REVIEW => 'En revisión de Marketing', self::CORRECTIONS_REQUESTED => 'Correcciones solicitadas', self::APPROVED => 'Aprobada', self::COMPLETED => 'Finalizada', self::CANCELLED => 'Cancelada', self::REJECTED => 'Rechazada'
         };
     }
 }

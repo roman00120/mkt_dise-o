@@ -32,7 +32,10 @@ class AuthenticatedSessionController extends Controller
         $user = $request->user();
         $user->forceFill(['last_login_at' => now(), 'last_login_ip' => $request->ip()])->saveQuietly();
 
-        return redirect()->intended($redirects->pathFor($user));
+        $target = $redirects->pathFor($user);
+        $request->session()->forget('url.intended');
+
+        return redirect()->to($target);
     }
 
     /**

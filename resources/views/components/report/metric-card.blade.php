@@ -1,0 +1,2 @@
+@props(['label','value','comparison'=>null])
+<div class="rounded border border-white/10 bg-[var(--color-bg-secondary)] p-4"><p class="text-xs uppercase tracking-wide text-gray-400">{{ $label }}</p><p class="mt-2 text-3xl font-bold">{{ $value }}</p>@if($comparison)<p class="mt-2 text-xs text-gray-400">{{ $comparison['absolute'] >= 0 ? '+' : '' }}{{ $comparison['absolute'] }} vs periodo anterior @if($comparison['percent'] !== null)({{ $comparison['percent'] }}%) @endif</p>@endif</div>
