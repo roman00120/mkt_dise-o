@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin;
 
+use App\Enums\RequestPriority;
 use App\Enums\UserStatus;
 use App\Models\AuditLog;
 use App\Models\CreativeRequest;
@@ -29,7 +30,7 @@ class AdminDashboardService
                 'pending_deliverables' => DeliverableVersion::where('status', 'marketing_review')->count(),
                 'total_requests' => $totalRequests,
                 'completed_requests' => $completedRequests,
-                'urgent_requests' => CreativeRequest::where('is_urgent', true)->count(),
+                'urgent_requests' => CreativeRequest::where('requested_priority', RequestPriority::URGENT->value)->count(),
                 'completion_rate' => $completionRate,
             ],
             'serviceBreakdown' => [

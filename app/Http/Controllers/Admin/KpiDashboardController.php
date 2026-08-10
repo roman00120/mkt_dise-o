@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\RequestPriority;
 use App\Http\Controllers\Controller;
 use App\Models\CreativeRequest;
 use App\Models\DeliverableVersion;
@@ -35,7 +36,7 @@ class KpiDashboardController extends Controller
         $inValidationRequests = (clone $query)->where('status', 'in_validation')->count();
         $inProgressRequests = (clone $query)->whereIn('status', ['assigned', 'in_progress', 'creative_review', 'marketing_review'])->count();
         $cancelledRequests = (clone $query)->whereIn('status', ['cancelled', 'rejected'])->count();
-        $urgentRequests = (clone $query)->where('is_urgent', true)->count();
+        $urgentRequests = (clone $query)->where('requested_priority', RequestPriority::URGENT->value)->count();
 
         // Calculate SLA / On-Time Rate
         $onTimeRequests = (clone $query)->where('status', 'completed')
