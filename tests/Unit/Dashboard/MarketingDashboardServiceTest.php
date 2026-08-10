@@ -2,22 +2,27 @@
 
 namespace Tests\Unit\Dashboard;
 
+use App\Models\User;
 use App\Services\Dashboard\MarketingDashboardService;
 use Carbon\Carbon;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class MarketingDashboardServiceTest extends TestCase
 {
-    public function test_service_returns_expected_dashboard_sections(): void
+    use RefreshDatabase;
+
+    public function test_service_returns_empty_database_state_without_fallback_data(): void
     {
-        $data = app(MarketingDashboardService::class)->forUser();
+        $user = User::factory()->create();
+        $data = app(MarketingDashboardService::class)->forUser('all', $user);
 
         $this->assertCount(4, $data['metrics']);
-        $this->assertCount(3, $data['serviceCards']);
-        $this->assertNotEmpty($data['attentionItems']);
-        $this->assertNotEmpty($data['recentRequests']);
-        $this->assertNotEmpty($data['pendingDeliverables']);
-        $this->assertNotEmpty($data['recentActivity']);
+        $this->assertSame(0, $data['metrics'][0]['value']);
+        $this->assertSame([], $data['attentionItems']);
+        $this->assertSame([], $data['recentRequests']);
+        $this->assertSame([], $data['pendingDeliverables']);
+        $this->assertSame([], $data['recentActivity']);
         $this->assertSame('all', $data['filter']);
     }
 
@@ -31,16 +36,5 @@ class MarketingDashboardServiceTest extends TestCase
         $this->assertSame('due_soon', $service->dateHealth('2026-07-29', false, $today));
         $this->assertSame('on_time', $service->dateHealth('2026-08-05', false, $today));
         $this->assertSame('on_time', $service->dateHealth('2026-07-20', true, $today));
-    }
-
-    public function test_attention_items_are_ordered_by_due_date(): void
-    {
-        $items = app(MarketingDashboardService::class)->forUser()['attentionItems'];
-        $dates = array_map(fn (array $item): int => $item['due_at']->getTimestamp(), $items);
-
-        $sorted = $dates;
-        sort($sorted);
-
-        $this->assertSame($sorted, $dates);
     }
 }

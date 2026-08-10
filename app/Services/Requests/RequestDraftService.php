@@ -13,8 +13,19 @@ class RequestDraftService
     public function create(array $data, int $userId): CreativeRequest
     {
         return DB::transaction(function () use ($data, $userId) {
-            $request = CreativeRequest::create(['uuid' => (string) Str::uuid(), 'folio' => app(FolioGenerator::class)->next(), 'requester_id' => $userId, 'service' => $data['service'], 'request_type' => $data['request_type'] ?? 'other', 'other_request_type' => $data['other_request_type'] ?? null, 'status' => RequestStatus::DRAFT, 'current_step' => 1]);
+            $service = $data['service'] ?? 'design';
+            $request = CreativeRequest::create([
+                'uuid' => (string) Str::uuid(),
+                'folio' => app(FolioGenerator::class)->next(),
+                'requester_id' => $userId,
+                'service' => $service,
+                'request_type' => $data['request_type'] ?? 'other',
+                'other_request_type' => $data['other_request_type'] ?? null,
+                'status' => RequestStatus::DRAFT,
+                'current_step' => 1,
+            ]);
             CreativeRequestDetail::create(['creative_request_id' => $request->id, 'data' => []]);
+            $request->events()->create(['actor_id' => $userId, 'event' => 'draft_created']);
 
             return $request->load(['detail', 'files']);
         });
@@ -32,6 +43,7 @@ class RequestDraftService
             $specific = $data['details'] ?? [];
             $detail->data = array_merge($detail->data ?? [], $specific);
             $detail->save();
+            $request->events()->create(['actor_id' => auth()->id(), 'event' => 'draft_updated']);
 
             return $request->fresh(['detail', 'files']);
         });

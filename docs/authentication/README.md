@@ -20,7 +20,7 @@ npm.cmd install
 npm.cmd run build
 ```
 
-El seeder crea usuarios locales únicamente fuera de producción. La contraseña temporal se toma de `LOCAL_AUTH_PASSWORD`; si no se define, se usa el valor de desarrollo documentado por el seeder. No usarla en ningún entorno compartido.
+El seeder general no crea usuarios. Crea el primer administrador con `php artisan admin:create`; los usuarios posteriores deben gestionarse desde el panel administrativo o el proceso aprobado de alta.
 
 ## Uso de SQLite
 
@@ -38,4 +38,3 @@ npm.cmd run build
 ```
 
 Para producción se debe sustituir SQLite por la base aprobada, configurar correo real mediante secretos y usar HTTPS.
-

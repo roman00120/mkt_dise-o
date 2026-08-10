@@ -12,6 +12,9 @@ import {
 } from 'lucide';
 
 window.Alpine = Alpine;
+document.querySelectorAll('[x-cloak]').forEach((element) => {
+    element.style.display = 'none';
+});
 Alpine.start();
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -46,4 +49,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 1000);
         });
     });
+
+    document.addEventListener('click', (event) => {
+        const button = event.target.closest('button[type="button"]');
+        const dialog = button?.closest('[role="dialog"]');
+        if (!button || !dialog || button.textContent.trim() !== 'Volver') return;
+
+        event.preventDefault();
+        event.stopPropagation();
+        const scope = dialog._x_dataStack?.[0];
+        if (scope) scope.open = false;
+    }, true);
 });

@@ -15,8 +15,8 @@ class DashboardController extends Controller
         $allowedFilters = ['all', 'pending', 'in-progress', 'review', 'completed'];
 
         return view('app.dashboard', array_merge(
-            $dashboard->forUser(in_array($filter, $allowedFilters, true) ? $filter : 'all'),
-            ['demoState' => $request->string('demo')->toString()]
+            $dashboard->forUser(in_array($filter, $allowedFilters, true) ? $filter : 'all', $request->user()),
+            []
         ));
     }
 }

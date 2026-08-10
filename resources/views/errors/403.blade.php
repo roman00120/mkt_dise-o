@@ -1,0 +1,1 @@
+@extends('layouts.guest') @section('title','Acceso no autorizado') @section('content')<h1>Acceso no autorizado</h1><p>No tienes permisos para consultar este recurso.</p><a href="{{ url('/') }}">Volver al inicio</a>@endsection

@@ -1,12 +1,38 @@
-<x-guest-layout title="Iniciar sesión">
-    <div class="mb-8"><p class="text-xs font-bold uppercase tracking-[.16em] text-red-300">Acceso corporativo</p><h1 class="mt-3 text-3xl font-bold tracking-tight">Bienvenido</h1><p class="mt-2 text-sm text-[var(--color-text-secondary)]">Inicia sesión con tu cuenta corporativa.</p></div>
-    @if(session('status'))<x-ui.alert variant="success" class="mb-5">{{ session('status') }}</x-ui.alert>@endif
-    @if($errors->any())<x-ui.alert variant="error" title="No fue posible iniciar sesión" class="mb-5">No fue posible iniciar sesión con los datos proporcionados.</x-ui.alert>@endif
-    <form method="POST" action="{{ route('login.store') }}" class="space-y-5" x-data="{ submitting: false }" @submit="submitting = true">
-        @csrf
-        <x-ui.input id="email" name="email" type="email" label="Correo corporativo" placeholder="nombre@totalground.com" autocomplete="email" :value="old('email')" :error="$errors->first('email')" required icon="mail" autofocus />
-        <x-auth.password-field :error="$errors->first('password')" />
-        <div class="flex flex-wrap items-center justify-between gap-3"><label class="inline-flex min-h-11 items-center gap-2 text-sm text-[var(--color-text-secondary)]"><input name="remember" type="checkbox" class="h-4 w-4 rounded border-[var(--color-border-default)] bg-[var(--color-bg-secondary)] accent-red-600"> Mantener sesión iniciada</label><a href="{{ route('password.request') }}" class="text-sm font-semibold text-red-300 hover:text-white">¿Olvidaste tu contraseña?</a></div>
-        <x-ui.button type="submit" class="w-full" size="lg" x-bind:disabled="submitting" x-bind:aria-busy="submitting"><span x-show="!submitting">Iniciar sesión</span><span x-show="submitting" x-cloak class="inline-flex items-center gap-2"><x-ui.spinner size="sm" /> Iniciando sesión…</span></x-ui.button>
-    </form>
-</x-guest-layout>
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}"><title>Iniciar sesión · TG Creative Hub</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="min-h-screen overflow-x-hidden bg-[#080c13] text-white antialiased">
+    <main class="grid min-h-screen lg:grid-cols-[42%_58%]">
+        <section class="relative hidden overflow-hidden border-r border-white/10 bg-[#090e16] lg:flex lg:flex-col lg:justify-between lg:px-[clamp(3rem,8vw,7.5rem)] lg:py-16">
+            <div class="absolute inset-0 opacity-70" aria-hidden="true"><div class="absolute -right-24 -top-16 h-[34rem] w-[34rem] rounded-full border border-red-500/20 [transform:rotate(32deg)]"></div><div class="absolute -bottom-32 left-1/3 h-[40rem] w-[28rem] -skew-x-12 bg-gradient-to-tr from-red-950/40 via-slate-900/20 to-transparent"></div><div class="absolute bottom-0 left-0 h-1/2 w-full bg-[linear-gradient(145deg,transparent_35%,rgba(227,6,19,.18)_35.2%,transparent_35.6%)]"></div></div>
+            <div class="relative z-10 pt-8"><div class="flex items-center gap-5"><img src="{{ asset('02-TG-Logo.png') }}" alt="Total Ground" class="h-28 w-32 object-contain drop-shadow-[0_0_20px_rgba(227,6,19,.45)]"><div><p class="text-5xl font-light tracking-tight">TOTAL</p><p class="text-5xl font-light tracking-tight">GROUND</p><p class="mt-3 text-xl tracking-[.34em] text-slate-200">TG CREATIVE HUB</p></div></div><div class="mt-12 h-0.5 w-16 bg-red-500"></div><h1 class="mt-12 max-w-md text-4xl font-semibold leading-tight xl:text-5xl">Un espacio para <span class="text-red-500">crear, colaborar</span> y crecer.</h1><p class="mt-8 max-w-md text-lg leading-8 text-slate-400">Gestiona tus solicitudes creativas, seguimientos y entregables de forma simple, organizada y eficiente.</p></div>
+            <div class="relative z-10 grid max-w-xl grid-cols-3 overflow-hidden rounded-2xl border border-white/10 bg-slate-950/55 backdrop-blur"><div class="p-6 text-center"><span class="mx-auto flex h-12 w-12 items-center justify-center text-3xl text-red-500">♢</span><p class="mt-3 font-semibold">Seguro</p><p class="mt-2 text-xs text-slate-400">Tus datos protegidos</p></div><div class="border-x border-white/10 p-6 text-center"><span class="mx-auto flex h-12 w-12 items-center justify-center text-3xl text-red-500">♧</span><p class="mt-3 font-semibold">Colaborativo</p><p class="mt-2 text-xs text-slate-400">Equipos conectados</p></div><div class="p-6 text-center"><span class="mx-auto flex h-12 w-12 items-center justify-center text-3xl text-red-500">◇</span><p class="mt-3 font-semibold">Eficiente</p><p class="mt-2 text-xs text-slate-400">Procesos optimizados</p></div></div>
+        </section>
+        <section class="relative flex min-h-screen items-center justify-center px-5 py-10 sm:px-10 lg:px-[clamp(3rem,8vw,8rem)]"><div class="absolute right-0 top-0 h-[36rem] w-[36rem] rounded-full bg-red-700/20 blur-[110px]" aria-hidden="true"></div><div class="relative z-10 w-full max-w-2xl rounded-[26px] border border-slate-700/80 bg-[#111722]/90 p-7 shadow-[0_0_60px_rgba(227,6,19,.22)] sm:p-12 lg:p-16">
+            <p class="text-sm font-medium uppercase tracking-wide text-red-500">Acceso corporativo</p><h2 class="mt-5 text-4xl font-bold tracking-tight sm:text-5xl">Bienvenido</h2><p class="mt-4 text-lg text-slate-400">Inicia sesión con tu cuenta corporativa.</p>
+            @if(session('status'))<div class="mt-6 rounded border border-green-500/40 bg-green-500/10 p-3 text-sm">{{ session('status') }}</div>@endif
+            @if($errors->any())<div class="mt-6 rounded border border-red-500/50 bg-red-950/40 p-4 text-sm" role="alert"><p class="font-semibold">No fue posible iniciar sesión</p><p class="mt-1 text-slate-300">No fue posible iniciar sesión con los datos proporcionados.</p></div>@endif
+            <form method="POST" action="{{ route('login.store') }}" class="mt-10 space-y-7" x-data="{ submitting: false, showPassword: false }" @submit="submitting = true">@csrf
+                <div><label for="email" class="block text-base font-semibold">Correo corporativo <span class="text-red-500">*</span></label><div class="mt-3 flex min-h-16 items-center rounded-xl border border-slate-600 bg-slate-950/50 focus-within:border-red-500 focus-within:ring-1 focus-within:ring-red-500"><span class="flex h-12 w-14 items-center justify-center border-r border-red-500/70 text-2xl text-red-500">✉</span><input id="email" name="email" type="email" value="{{ old('email') }}" required autofocus autocomplete="email" placeholder="nombre@totalground.com" class="h-full min-w-0 flex-1 bg-transparent px-4 text-base outline-none placeholder:text-slate-500"></div>@error('email')<p class="mt-2 text-sm text-red-300">{{ $message }}</p>@enderror</div>
+                <div><label for="password" class="block text-base font-semibold">Contraseña <span class="text-red-500">*</span></label><div class="mt-3 flex min-h-16 items-center rounded-xl border border-slate-600 bg-slate-950/50 focus-within:border-red-500 focus-within:ring-1 focus-within:ring-red-500"><span class="flex h-12 w-14 items-center justify-center border-r border-red-500/70 text-2xl text-red-500">♙</span><input id="password" name="password" type="password" required autocomplete="current-password" class="h-full min-w-0 flex-1 bg-transparent px-4 text-base outline-none"><button type="button" class="flex h-11 w-12 items-center justify-center text-slate-400 transition hover:text-white" onclick="togglePasswordVisibility(this)" aria-label="Mostrar contraseña"><svg data-eye width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.5"></circle></svg></button></div>@error('password')<p class="mt-2 text-sm text-red-300">{{ $message }}</p>@enderror</div>
+                <div class="flex flex-wrap items-center justify-between gap-4"><label class="inline-flex min-h-11 items-center gap-3 text-base text-slate-400"><input name="remember" type="checkbox" class="h-5 w-5 rounded border-slate-600 bg-slate-950 accent-red-600"> Mantener sesión iniciada</label><a href="{{ route('password.request') }}" class="text-base font-semibold text-red-500 hover:text-red-300">¿Olvidaste tu contraseña?</a></div>
+                <button type="submit" x-bind:disabled="submitting" class="flex min-h-16 w-full items-center justify-center gap-5 rounded-xl bg-red-600 text-lg font-bold shadow-[0_10px_30px_rgba(227,6,19,.2)] hover:bg-red-500 disabled:cursor-wait disabled:opacity-70"><span x-show="!submitting">Iniciar sesión <span class="ml-4 text-2xl">→</span></span><span x-show="submitting" x-cloak>Iniciando sesión…</span></button>
+            </form>
+            <div class="mt-10 flex items-center gap-5 text-slate-500"><span class="h-px flex-1 bg-slate-700"></span><span class="text-xl text-red-500">♢</span><span class="h-px flex-1 bg-slate-700"></span></div><p class="mt-8 text-center text-base text-slate-400">¿Necesitas ayuda? Contacta a <a href="mailto:soporte@totalground.com" class="text-red-500 hover:text-red-300">soporte</a></p>
+        </div><footer class="absolute bottom-6 left-0 right-0 text-center text-xs text-slate-500">▢ &nbsp; Total Ground © 2026 · Todos los derechos reservados <span class="mx-4">|</span> Términos de uso <span class="mx-4">|</span> Privacidad</footer></section>
+    </main>
+    <script>
+        function togglePasswordVisibility(button) {
+            const input = document.getElementById('password');
+            const visible = input.type === 'text';
+            input.type = visible ? 'password' : 'text';
+            button.setAttribute('aria-label', visible ? 'Mostrar contraseña' : 'Ocultar contraseña');
+            button.classList.toggle('text-red-500', !visible);
+        }
+    </script>
+</body>
+</html>

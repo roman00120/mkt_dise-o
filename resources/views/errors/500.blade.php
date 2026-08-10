@@ -1,0 +1,1 @@
+@extends('layouts.guest') @section('title','Error inesperado') @section('content')<h1>No pudimos completar la solicitud</h1><p>Referencia: {{ request()->attributes->get('correlation_id','no-disponible') }}</p>@endsection

@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\App;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\CreativeRequest;
+use App\Models\User;
+use App\Notifications\CreativeRequestSubmittedNotification;
 use App\Services\Requests\RequestSubmissionService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class RequestSubmissionController extends Controller
 {
@@ -16,6 +20,8 @@ class RequestSubmissionController extends Controller
         $request->validate(['confirmed' => ['accepted']]);
         $this->validateFinal($creativeRequest);
         $model = $submission->submit($creativeRequest);
+        $admins = User::query()->where('role', UserRole::ADMIN)->where('status', 'active')->get();
+        Notification::send($admins, new CreativeRequestSubmittedNotification($model->load('requester')));
 
         return redirect()->route('app.requests.confirmation', $model);
     }

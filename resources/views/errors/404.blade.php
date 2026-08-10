@@ -1,0 +1,1 @@
+@extends('layouts.guest') @section('title','Página no encontrada') @section('content')<h1>Página no encontrada</h1><p>El recurso solicitado no está disponible.</p><a href="{{ url('/') }}">Volver al inicio</a>@endsection

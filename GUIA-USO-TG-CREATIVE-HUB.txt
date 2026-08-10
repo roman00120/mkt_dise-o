@@ -1,0 +1,403 @@
+GUIA PASO A PASO
+TG CREATIVE HUB
+================
+
+Este documento explica solamente el flujo principal de trabajo:
+
+1. Marketing crea y envia una solicitud.
+2. Hugo la revisa, aprueba y la asigna.
+3. Ana realiza el diseño y envia el resultado final a Marketing.
+4. Marketing revisa y aprueba el resultado.
+5. Hugo marca la solicitud como finalizada.
+
+
+PARTE 1 - MARKETING CREA UNA SOLICITUD
+=======================================
+
+1. Abre el navegador.
+
+
+  entra a:
+
+       http://192.168.15.34:8000/login
+
+3. Inicia sesion con la cuenta de Marketing.
+
+4. En el menu izquierdo selecciona:
+
+       Inicio
+
+5. Pulsa:
+
+       Nueva solicitud
+
+6. En la pantalla "Que tipo de apoyo creativo necesitas?", selecciona:
+
+       Diseno Grafico
+
+7. Pulsa:
+
+       Continuar
+
+8. Selecciona el tipo de solicitud. Por ejemplo:
+
+       Catalogo
+       Publicacion para redes
+       Presentacion
+       Material impreso
+
+9. Pulsa:
+
+       Continuar
+
+10. Completa el brief:
+
+       Titulo de la solicitud
+       Descripcion
+       Objetivo
+       Publico objetivo
+       Canal o medio
+       Tipo de pieza
+       Numero de propuestas
+
+11. Pulsa:
+
+       Continuar
+
+12. Si tienes archivos de referencia, agregalos en esta pantalla:
+
+       Brief
+       Fotografias
+       Logotipos
+       Archivos de ejemplo
+
+13. Pulsa:
+
+       Continuar
+
+14. Selecciona la fecha en que necesitas el trabajo.
+
+15. Selecciona la prioridad:
+
+       Baja, Media, Alta o Urgente
+
+16. Si eliges Urgente o una fecha muy cercana, escribe el motivo en:
+
+       Justificacion de urgencia
+
+17. Pulsa:
+
+       Continuar
+
+18. Revisa toda la informacion.
+
+19. Marca la casilla de confirmacion.
+
+20. Pulsa:
+
+       Enviar solicitud
+
+21. La solicitud queda en estado:
+
+       Pendiente
+
+22. Marketing ya termino su parte. Ahora debe esperar a que Hugo la revise.
+
+
+PARTE 2 - HUGO REVISA, APRUEBA Y ASIGNA
+========================================
+
+1. Hugo inicia sesion en:
+
+       http://127.0.0.1:8000/login
+
+2. Entra con la cuenta de Hugo.
+
+3. Al entrar, abre el panel creativo. Si no aparece automaticamente, entra a:
+
+       http://127.0.0.1:8000/creative
+
+4. En el menu izquierdo pulsa:
+
+       Solicitudes
+
+5. Busca la solicitud nueva. Debe aparecer como:
+
+       Pendiente
+       o
+       En validacion
+
+6. Pulsa sobre la solicitud para abrirla.
+
+7. Hugo debe revisar:
+
+       Titulo
+       Descripcion
+       Fecha requerida
+       Prioridad
+       Archivos adjuntos
+       Informacion del brief
+
+8. Si falta informacion, Hugo pulsa:
+
+       Solicitar informacion
+
+   Escribe que dato necesita. Marketing recibira la solicitud y debe responder.
+
+9. Si la informacion esta completa, Hugo busca el panel de validacion.
+
+10. En el campo "Responsable" selecciona:
+
+       Ana Carolina Roman
+
+   Para una solicitud de Diseno Grafico.
+
+11. Si fuera Video, seleccionaria a Gerardo.
+
+12. Si fuera Render 3D, seleccionaria a Jesus.
+
+13. Hugo puede ajustar:
+
+       Prioridad operativa
+       Fecha interna
+       Observacion
+
+14. Pulsa el boton:
+
+       Validar y asignar
+
+15. La solicitud cambia a:
+
+       Asignada
+
+16. En este momento Ana recibe:
+
+       Una notificacion dentro de la aplicacion.
+       Un correo con los datos de la solicitud.
+
+17. Hugo ya termino su primera parte. Ahora Ana debe trabajar la solicitud.
+
+
+PARTE 3 - ANA TRABAJA LA SOLICITUD
+===================================
+
+1. Ana inicia sesion en:
+
+       http://127.0.0.1:8000/login
+
+2. Entra con la cuenta de Ana.
+
+3. Abre:
+
+       http://127.0.0.1:8000/creative
+
+4. En el menu pulsa:
+
+       Inicio
+       o
+       Solicitudes
+
+5. Busca la solicitud que Hugo le asigno.
+
+6. Pulsa sobre la solicitud.
+
+7. Lee el brief y descarga los archivos de referencia.
+
+8. Si necesita aclarar algo, baja hasta la seccion:
+
+       Conversacion
+
+9. Escribe la pregunta en "Anadir comentario" y pulsa:
+
+       Publicar comentario
+
+10. Para avanzar el trabajo, utiliza el estado o accion disponible:
+
+       En proceso
+
+11. Cuando el diseño este terminado, baja a la seccion:
+
+       Entregables
+
+12. Pulsa:
+
+       Crear entregable
+
+13. Escribe el nombre del entregable. Por ejemplo:
+
+       Catalogo final
+
+14. Guarda el entregable.
+
+15. Crea una version y sube el archivo final.
+
+16. Verifica que el archivo que subiste sea el correcto.
+
+17. Cuando el diseño este listo para que Marketing lo revise, pulsa exactamente:
+
+       Enviar diseno final a Marketing
+
+18. No pulses "Enviar a revision interna" si ya terminaste y quieres que lo
+    revise Marketing. El boton correcto es "Enviar diseno final a Marketing".
+
+19. La solicitud cambia a:
+
+       Revision de Marketing
+
+20. Ana ya termino su parte. Ahora Marketing debe revisar el archivo.
+
+
+PARTE 4 - MARKETING REVISA EL RESULTADO FINAL
+==============================================
+
+1. Marketing inicia sesion.
+
+2. Entra a:
+
+       Mis solicitudes
+
+3. Abre la solicitud correspondiente.
+
+4. Baja a:
+
+       Entregables
+
+5. Pulsa sobre la version que envio Ana.
+
+6. Revisa el archivo y decide:
+
+   Si esta correcto:
+
+       Pulsa Aprobar
+
+   Si necesita cambios:
+
+       Pulsa Solicitar correcciones
+
+       Escribe exactamente que debe cambiarse.
+
+7. Si Marketing solicita correcciones, Ana recibe el aviso, modifica el diseño,
+   crea una nueva version y vuelve a pulsar:
+
+       Enviar diseno final a Marketing
+
+8. Si Marketing pulsa Aprobar, la solicitud cambia a:
+
+       Aprobada
+
+9. Marketing puede descargar el archivo aprobado desde Entregables.
+
+
+PARTE 5 - HUGO CIERRA LA SOLICITUD
+==================================
+
+1. Hugo entra al panel creativo.
+
+2. Abre la solicitud que ya aparece como:
+
+       Aprobada
+
+3. En la parte superior o inferior del detalle busca el boton:
+
+       Marcar como finalizada
+
+4. Pulsa el boton y confirma.
+
+5. La solicitud cambia a:
+
+       Finalizada
+
+Este es el cierre correcto. La solicitud no se marca automaticamente como
+finalizada solo porque Ana suba un archivo o porque Marketing lo apruebe.
+Despues de la aprobacion de Marketing, Hugo debe pulsar "Marcar como
+finalizada".
+
+
+RESUMEN DEL FLUJO COMPLETO
+===========================
+
+MARKETING:
+    Nueva solicitud
+    -> Completa formulario
+    -> Adjunta archivos
+    -> Envia solicitud
+
+HUGO:
+    Revisa
+    -> Valida
+    -> Selecciona a Ana
+    -> Pulsa Validar y asignar
+
+ANA:
+    Abre la solicitud asignada
+    -> Trabaja el diseño
+    -> Crea entregable
+    -> Sube archivo final
+    -> Pulsa Enviar diseno final a Marketing
+
+MARKETING:
+    Revisa el entregable
+    -> Aprueba o solicita correcciones
+    -> Descarga el archivo aprobado
+
+HUGO:
+    Abre la solicitud aprobada
+    -> Pulsa Marcar como finalizada
+
+
+QUE SIGNIFICA CADA ESTADO
+==========================
+
+Pendiente:
+    Marketing ya envio la solicitud y Hugo aun no la revisa.
+
+En validacion:
+    Hugo esta revisando la informacion.
+
+Asignada:
+    Hugo eligio a la persona que hara el trabajo.
+
+En proceso:
+    Ana esta trabajando en el diseño.
+
+Revision de Marketing:
+    Ana envio el resultado final y Marketing debe revisarlo.
+
+Correcciones solicitadas:
+    Marketing pidio cambios.
+
+Aprobada:
+    Marketing acepto el archivo final.
+
+Finalizada:
+    Hugo cerro oficialmente la solicitud.
+
+
+SI ALGO NO APARECE
+==================
+
+- Actualiza la pagina con Ctrl + F5.
+- Confirma que estas usando el usuario correcto.
+- Hugo debe entrar al panel /creative.
+- Ana debe buscar la solicitud en Inicio o Solicitudes.
+- Marketing debe buscarla en Mis solicitudes.
+- Si no llega un correo en local, revisa:
+
+      storage/logs/laravel.log
+
+- Si otra computadora no puede entrar, usa la IP de red y no localhost:
+
+      http://192.168.15.34:8000/login
+
+
+IMPORTANTE
+==========
+
+El correo local esta configurado para registrarse en el log. Para enviar correos
+reales a Outlook se deben configurar los datos SMTP corporativos en .env.
+
+No compartir contraseñas en este archivo ni subir credenciales reales al codigo.
+
+
+FIN DE LA GUIA
+TG Creative Hub - Total Ground

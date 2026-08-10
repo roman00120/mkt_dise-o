@@ -16,7 +16,7 @@ class EnsureUserIsActive
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
-            return redirect()->route('login')->withErrors(['email' => 'Tu cuenta no está disponible. Contacta al administrador.']);
+            return redirect()->route('login')->withErrors(['email' => 'Tu cuenta no está activa. Contacta al administrador.']);
         }
 
         return $next($request);

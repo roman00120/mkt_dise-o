@@ -5,6 +5,7 @@ namespace Tests\Feature\App;
 use App\Enums\UserRole;
 use App\Enums\UserStatus;
 use App\Models\User;
+use Database\Seeders\ProductionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -12,18 +13,23 @@ class MarketingDashboardTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_marketing_dashboard_renders_business_summary(): void
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(ProductionSeeder::class);
+    }
+
+    public function test_marketing_dashboard_renders_database_backed_empty_summary(): void
     {
         $user = User::factory()->create(['name' => 'Andrea Martínez', 'role' => UserRole::MARKETING]);
 
         $this->actingAs($user)->get(route('app.dashboard'))
             ->assertOk()
-            ->assertSee('Buenos')
             ->assertSee('Andrea Martínez')
             ->assertSee('Nueva solicitud')
             ->assertSee('Solicitudes activas')
             ->assertSee('Diseño Gráfico')
-            ->assertSee('Requieren tu atención')
+            ->assertSee('No tienes solicitudes que requieran atención.')
             ->assertSee('Solicitudes recientes')
             ->assertSee('Pendientes de revisión')
             ->assertSee('Actividad reciente');
@@ -53,24 +59,15 @@ class MarketingDashboardTest extends TestCase
         }
     }
 
-    public function test_dashboard_states_and_visual_filters_render(): void
+    public function test_dashboard_ignores_removed_demo_query_states_and_keeps_empty_state(): void
     {
-        $this->actingAs(User::factory()->create())
-            ->get(route('app.dashboard', ['demo' => 'empty']))
-            ->assertOk()
-            ->assertSee('Aún no tienes solicitudes');
+        $user = User::factory()->create(['role' => UserRole::MARKETING]);
 
-        $this->get(route('app.dashboard', ['demo' => 'loading']))
-            ->assertOk()
-            ->assertSee('Cargando métricas');
-
-        $this->get(route('app.dashboard', ['demo' => 'error']))
-            ->assertOk()
-            ->assertSee('No pudimos cargar tu');
-
-        $this->get(route('app.dashboard', ['filter' => 'review']))
-            ->assertOk()
-            ->assertSee('En revisión de Marketing');
+        foreach ([['demo' => 'empty'], ['demo' => 'loading'], ['demo' => 'error'], ['filter' => 'review']] as $query) {
+            $this->actingAs($user)->get(route('app.dashboard', $query))
+                ->assertOk()
+                ->assertSee('No tienes solicitudes que requieran atención.');
+        }
     }
 
     public function test_marketing_placeholder_routes_are_protected(): void

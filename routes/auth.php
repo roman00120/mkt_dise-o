@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\ChangePasswordController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
@@ -16,6 +17,8 @@ Route::middleware('guest')->group(function (): void {
 });
 
 Route::middleware(['auth', 'active'])->group(function (): void {
+    Route::get('change-password', [ChangePasswordController::class, 'create'])->name('password.change');
+    Route::post('change-password', [ChangePasswordController::class, 'update'])->name('password.change.update');
     Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])->name('password.confirm');
     Route::post('confirm-password', [ConfirmablePasswordController::class, 'store'])->name('password.confirm.store');
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');

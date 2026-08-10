@@ -46,7 +46,8 @@ class RequestWizardController extends Controller
         $this->authorize('update', $creativeRequest);
         $step = (int) $request->input('step');
         $data = $request->validated();
-        if ($step === 5 && $dates->isShort($data['service'], $data['required_date']) && blank($data['urgency_reason'] ?? null)) {
+        $service = $data['service'] ?? $creativeRequest->service;
+        if ($step === 5 && $dates->isShort($service, $data['required_date']) && blank($data['urgency_reason'] ?? null)) {
             return back()->withErrors(['urgency_reason' => 'Explica el motivo de la fecha corta para continuar.'])->withInput();
         }
         $model = $drafts->update($creativeRequest, $data, $step);

@@ -1,0 +1,2 @@
+@extends($layout) @section('title',$title) @section('header',$header)
+@section('content')<h1 class="text-2xl font-bold">{{ $title }}</h1>@include('reports.partials.filters')<div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">@foreach($metrics as $key=>$value)<x-report.metric-card :label="is_string($key)?str_replace('_',' ',$key):'Responsable'" :value="is_array($value)?($value['total']??'—'):$value" /></div>@endforeach<p class="mt-6 text-sm text-gray-400">Las métricas se calculan con datos reales y respetan el alcance de tu rol.</p>@endsection

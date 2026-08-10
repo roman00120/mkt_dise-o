@@ -17,4 +17,19 @@ class CreativeRequestFactory extends Factory
     {
         return ['uuid' => fake()->uuid(), 'folio' => 'TG-'.now()->year.'-'.fake()->unique()->numerify('####'), 'requester_id' => User::factory(), 'service' => CreativeService::DESIGN, 'request_type' => 'digital', 'title' => 'Pieza de campaña', 'description' => 'Descripción de prueba', 'requested_priority' => RequestPriority::MEDIUM, 'status' => RequestStatus::DRAFT, 'current_step' => 3];
     }
+
+    public function status(RequestStatus $status): static
+    {
+        return $this->state(fn () => ['status' => $status]);
+    }
+
+    public function assignedTo(User $user): static
+    {
+        return $this->state(fn () => ['assignee_id' => $user->id, 'assigned_by' => $user->id, 'assigned_at' => now()]);
+    }
+
+    public function withInternalDate(?string $date = null): static
+    {
+        return $this->state(fn () => ['internal_due_date' => $date ?: today()->addDays(3)->toDateString()]);
+    }
 }
