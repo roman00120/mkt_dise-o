@@ -119,6 +119,7 @@
                             <p class="text-[11px] text-slate-400 font-medium">
                                 Adjuntado por: <strong class="text-slate-200">{{ $file->uploader?->name ?? $version->creator?->name ?? 'Ana Carolina Román' }}</strong>
                             </p>
+                            <p class="text-[11px] text-slate-500">{{ number_format($file->size / 1024 / 1024, 2) }} MB · {{ strtoupper($file->extension) }}</p>
                         </div>
                     </div>
 
@@ -161,11 +162,12 @@
                     <span>📤</span>
                     <span>Subir Nuevo Archivo a la Versión {{ $version->version_number }}</span>
                 </h3>
-                <form method="POST" enctype="multipart/form-data" action="{{ route('creative.deliverables.versions.files.store', [$deliverable, $version]) }}" class="grid gap-4 sm:grid-cols-4 items-end rounded-xl bg-slate-950 p-4 border border-slate-800">
+                <form method="POST" enctype="multipart/form-data" data-max-bytes="104857600" action="{{ route('creative.deliverables.versions.files.store', [$deliverable, $version]) }}" class="js-upload-form grid gap-4 sm:grid-cols-4 items-end rounded-xl bg-slate-950 p-4 border border-slate-800">
                     @csrf
                     <div class="sm:col-span-2">
                         <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Seleccionar Archivo (Imagen, Video, Documento):</label>
-                        <input required type="file" name="file" class="w-full text-xs text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-red-600 file:text-white hover:file:bg-red-500 cursor-pointer">
+                        <input required type="file" name="file" class="w-full text-xs text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs font-bold file:bg-red-600 file:text-white hover:file:bg-red-500 cursor-pointer">
+                        <p data-upload-size class="mt-1 text-[11px] text-slate-500">Máximo 100 MB por archivo.</p>
                     </div>
 
                     <div>
@@ -176,6 +178,11 @@
                             <option value="source">Source (Editable PSD/AI/Blend)</option>
                             <option value="supporting">Supporting (Recursos/Anexos)</option>
                         </select>
+                    </div>
+
+                    <div data-upload-progress class="hidden sm:col-span-4" aria-live="polite">
+                        <div class="h-2 overflow-hidden rounded-full bg-slate-800"><div data-upload-progress-bar class="h-full w-0 rounded-full bg-emerald-500 transition-all duration-200"></div></div>
+                        <p data-upload-status class="mt-1 text-[11px] text-slate-400">Listo para subir.</p>
                     </div>
 
                     <div>
@@ -193,6 +200,31 @@
                 </form>
             </div>
         @endif
+    </section>
+
+    <section class="rounded-2xl border border-slate-800 bg-slate-900/90 p-6 shadow-xl">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div>
+                <h2 class="text-lg font-bold text-white">Historial de actividad</h2>
+                <p class="mt-1 text-xs text-slate-400">Quién realizó cada cambio y cuándo ocurrió.</p>
+            </div>
+            <span class="rounded bg-slate-800 px-3 py-1 text-xs font-bold text-slate-300">{{ $deliverable->request->events->count() }} eventos</span>
+        </div>
+        <ol class="mt-5 space-y-4">
+            @forelse($deliverable->request->events->sortByDesc('created_at') as $event)
+                @php
+                    $labels = ['request_submitted' => 'envió la solicitud', 'file_uploaded' => 'adjuntó un archivo', 'file_removed' => 'eliminó un archivo', 'deliverable_file_uploaded' => 'subió un archivo a la entrega', 'request_cancelled' => 'canceló la solicitud'];
+                @endphp
+                <li class="relative border-l-2 border-red-500/60 pl-4">
+                    <span class="absolute -left-[7px] top-1 h-3 w-3 rounded-full border-2 border-slate-900 bg-red-500"></span>
+                    <p class="text-sm text-slate-200"><strong>{{ $event->actor?->name ?? 'Sistema' }}</strong> {{ $labels[$event->event] ?? 'actualizó la solicitud' }}</p>
+                    @if(data_get($event->metadata, 'name'))<p class="mt-1 text-xs text-slate-400">Archivo: {{ data_get($event->metadata, 'name') }}</p>@endif
+                    <time class="mt-1 block text-xs text-slate-500" datetime="{{ $event->created_at?->toIso8601String() }}">{{ $event->created_at?->diffForHumans() }} · {{ $event->created_at?->isoFormat('D MMM YYYY HH:mm') }}</time>
+                </li>
+            @empty
+                <li class="text-sm text-slate-400">Aún no hay actividad registrada.</li>
+            @endforelse
+        </ol>
     </section>
 
     <!-- Version Status Submission Actions -->

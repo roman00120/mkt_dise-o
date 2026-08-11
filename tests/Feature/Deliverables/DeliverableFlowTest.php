@@ -23,6 +23,10 @@ class DeliverableFlowTest extends TestCase
         $deliverable = $request->deliverables()->firstOrFail();
         $version = $deliverable->currentVersion;
         $this->actingAs($designer)->post(route('creative.deliverables.versions.files.store', [$deliverable, $version]), ['file' => UploadedFile::fake()->create('preview.pdf', 20, 'application/pdf'), 'category' => 'preview', 'is_primary' => 1])->assertRedirect();
+        $this->actingAs($designer)->get(route('creative.deliverables.versions.edit', [$deliverable, $version]))
+            ->assertOk()
+            ->assertSee('data-upload-progress', false)
+            ->assertSee('Historial de actividad');
         $this->actingAs($designer)->patch(route('creative.deliverables.versions.update', [$deliverable, $version]), ['notes' => 'Entrega lista'])->assertRedirect();
         $this->actingAs($designer)->post(route('creative.deliverables.versions.submit-internal', [$deliverable, $version]))->assertRedirect();
         $this->assertSame('internal_review', $version->fresh()->status->value);
