@@ -209,6 +209,7 @@ Route::middleware(['auth', 'active', 'password.changed'])->group(function (): vo
         Route::get('/settings', [AdminSettingsController::class, 'index'])->name('settings.index');
         Route::patch('/settings', [AdminSettingsController::class, 'update'])->middleware(['password.confirm', 'throttle:20,1'])->name('settings.update');
         Route::get('/requests', [AdminRequestController::class, 'index'])->name('requests.index');
+        Route::delete('/requests/{creativeRequest}', [AdminRequestController::class, 'destroy'])->middleware(['password.confirm', 'throttle:10,60'])->name('requests.destroy');
         Route::get('/requests/{creativeRequest}', [AdminRequestController::class, 'show'])->name('requests.show');
         Route::get('/audit', [AdminAuditController::class, 'index'])->name('audit.index');
         Route::get('/exports/users', AdminUserExportController::class)->middleware(['password.confirm', 'throttle:5,60'])->name('exports.users');

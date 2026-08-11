@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Enums\RequestStatus;
 use App\Enums\UserRole;
 use App\Models\AuditLog;
+use App\Models\CreativeRequest;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -44,5 +46,17 @@ class AdministrationTest extends TestCase
         $response->assertOk()->assertHeader('content-type', 'text/csv; charset=UTF-8');
         $this->assertStringNotContainsString('password', strtolower($response->streamedContent()));
         $this->assertGreaterThan(0, AuditLog::where('action', 'export.users')->count());
+    }
+
+    public function test_admin_can_soft_delete_a_request_in_any_state(): void
+    {
+        $admin = User::factory()->create(['role' => UserRole::ADMIN]);
+        $request = CreativeRequest::factory()->status(RequestStatus::COMPLETED)->create(['title' => 'Solicitud histórica']);
+
+        $this->actingAs($admin)->post(route('password.confirm.store'), ['password' => 'password'])->assertRedirect();
+        $this->actingAs($admin)->delete(route('admin.requests.destroy', $request))->assertRedirect(route('admin.requests.index'));
+
+        $this->assertSoftDeleted('creative_requests', ['id' => $request->id]);
+        $this->assertDatabaseHas('audit_logs', ['action' => 'request.deleted', 'actor_id' => $admin->id, 'auditable_id' => $request->id]);
     }
 }
