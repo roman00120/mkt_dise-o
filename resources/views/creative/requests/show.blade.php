@@ -77,7 +77,12 @@
                 <h2 class="text-lg font-semibold">Historial operativo</h2>
                 <ol class="mt-4 space-y-3">
                     @forelse ($creativeRequest->events->sortByDesc('created_at') as $event)
-                        <li class="border-l-2 border-red-500 pl-3 text-sm">{{ $event->actor?->name ?? 'Sistema' }} · {{ str($event->event)->replace('_', ' ')->title() }}</li>
+                        <li class="border-l-2 border-red-500 pl-3 text-sm">
+                            <p>{{ $event->actor?->name ?? 'Sistema' }} · {{ str($event->event)->replace('_', ' ')->title() }}</p>
+                            <time class="mt-1 block text-xs text-slate-400" datetime="{{ $event->created_at?->toIso8601String() }}">
+                                {{ $event->created_at?->diffForHumans() }} · {{ $event->created_at?->isoFormat('D MMM YYYY HH:mm') }}
+                            </time>
+                        </li>
                     @empty
                         <li class="text-sm text-slate-400">Sin historial.</li>
                     @endforelse

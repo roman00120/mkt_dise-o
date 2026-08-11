@@ -47,7 +47,6 @@ class CreativeOperationsTest extends TestCase
             ->assertOk()
             ->assertSee($assigned->folio)
             ->assertSee('1 Pendientes');
-            ->assertSee($assigned->folio);
     }
 
     public function test_supervisor_can_validate_and_assign_only_matching_active_role(): void
