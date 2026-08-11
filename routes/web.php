@@ -69,6 +69,7 @@ use App\Http\Controllers\Creative\RequestTransitionController;
 use App\Http\Controllers\Creative\RequestValidationController;
 use App\Http\Controllers\Creative\WorkloadController;
 use App\Http\Controllers\Health\DetailedHealthController;
+use App\Http\Controllers\PriorityController;
 use App\Http\Controllers\PublicController;
 use Illuminate\Support\Facades\Route;
 
@@ -78,6 +79,8 @@ Route::get('/design-system', [PublicController::class, 'designSystem'])->name('d
 Route::get('/health/details', DetailedHealthController::class)->middleware(['auth', 'active', 'role:admin'])->name('health.details');
 
 Route::middleware(['auth', 'active', 'password.changed'])->group(function (): void {
+    Route::get('/priorities', [PriorityController::class, 'index'])->middleware('role:marketing,admin,creative,design,video,render,supervisor')->name('priorities.index');
+    Route::post('/priorities/{creativeRequest}/move', [PriorityController::class, 'move'])->middleware('role:admin,creative,design,video,render,supervisor')->name('priorities.move');
     Route::get('/app', DashboardController::class)->middleware('role:marketing,supervisor,admin')->name('app.dashboard');
     Route::middleware('role:marketing,supervisor,admin')->group(function (): void {
         Route::get('/app/requests/create', [RequestWizardController::class, 'create'])->middleware('role:marketing')->name('app.requests.create');
