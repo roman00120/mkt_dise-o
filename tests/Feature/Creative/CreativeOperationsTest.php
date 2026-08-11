@@ -45,7 +45,8 @@ class CreativeOperationsTest extends TestCase
         $this->actingAs($admin)
             ->get(route('creative.dashboard'))
             ->assertOk()
-            ->assertSee($assigned->folio);
+            ->assertSee($assigned->folio)
+            ->assertSee('1 Pendientes');
     }
 
     public function test_supervisor_can_validate_and_assign_only_matching_active_role(): void
