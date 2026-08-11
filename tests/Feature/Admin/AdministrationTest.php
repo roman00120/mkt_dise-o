@@ -59,6 +59,7 @@ class AdministrationTest extends TestCase
         $this->assertSoftDeleted('creative_requests', ['id' => $request->id]);
         $this->assertDatabaseHas('audit_logs', ['action' => 'request.deleted', 'actor_id' => $admin->id, 'auditable_id' => $request->id]);
     }
+
     public function test_admin_sees_delete_action_on_the_operational_detail(): void
     {
         $admin = User::factory()->create(['role' => UserRole::ADMIN]);
