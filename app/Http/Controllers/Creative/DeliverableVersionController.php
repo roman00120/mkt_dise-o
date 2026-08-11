@@ -26,7 +26,8 @@ class DeliverableVersionController extends Controller
     {
         $this->assertRelation($deliverable, $version);
         $this->authorize('view', $version);
-        $version->load(['files', 'corrections' => fn ($q) => $q->where('status', 'open')]);
+        $version->load(['files.uploader', 'creator', 'corrections' => fn ($q) => $q->where('status', 'open')]);
+        $deliverable->load('request.events.actor');
 
         return view('creative.deliverables.versions.edit', compact('deliverable', 'version'));
     }

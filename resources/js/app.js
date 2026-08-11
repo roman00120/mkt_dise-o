@@ -60,4 +60,59 @@ document.addEventListener('DOMContentLoaded', () => {
         const scope = dialog._x_dataStack?.[0];
         if (scope) scope.open = false;
     }, true);
+
+    document.querySelectorAll('form.js-upload-form').forEach((form) => {
+        const input = form.querySelector('input[type="file"]');
+        const progress = form.querySelector('[data-upload-progress]');
+        const bar = form.querySelector('[data-upload-progress-bar]');
+        const status = form.querySelector('[data-upload-status]');
+        const maxBytes = Number(form.dataset.maxBytes || 104857600);
+
+        input?.addEventListener('change', () => {
+            const file = input.files?.[0];
+            if (!file) return;
+            const size = file.size / 1024 / 1024;
+            const label = form.querySelector('[data-upload-size]');
+            if (label) label.textContent = `${size.toFixed(1)} MB de máximo ${(maxBytes / 1024 / 1024).toFixed(0)} MB`;
+            if (file.size > maxBytes) {
+                input.setCustomValidity(`El archivo supera el máximo de ${(maxBytes / 1024 / 1024).toFixed(0)} MB.`);
+                if (status) status.textContent = 'El archivo supera el tamaño permitido.';
+            } else {
+                input.setCustomValidity('');
+                if (status) status.textContent = 'Listo para subir.';
+            }
+        });
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            if (!form.reportValidity()) return;
+            const request = new XMLHttpRequest();
+            request.open('POST', form.action);
+            request.setRequestHeader('X-CSRF-TOKEN', csrf || '');
+            request.setRequestHeader('Accept', 'application/json');
+            if (progress) progress.classList.remove('hidden');
+            if (status) status.textContent = 'Subiendo archivo…';
+            if (bar) bar.style.width = '0%';
+            request.upload.addEventListener('progress', (uploadEvent) => {
+                if (!uploadEvent.lengthComputable) return;
+                const percent = Math.round((uploadEvent.loaded / uploadEvent.total) * 100);
+                if (bar) bar.style.width = `${percent}%`;
+                if (status) status.textContent = `Subiendo archivo… ${percent}%`;
+            });
+            request.addEventListener('load', () => {
+                if (request.status >= 200 && request.status < 400) {
+                    if (status) status.textContent = 'Archivo subido correctamente. Actualizando…';
+                    window.location.reload();
+                } else if (status) {
+                    status.textContent = 'No se pudo subir el archivo. Revisa el formato y el tamaño.';
+                    if (progress) progress.classList.add('hidden');
+                }
+            });
+            request.addEventListener('error', () => {
+                if (status) status.textContent = 'Se perdió la conexión durante la carga.';
+                if (progress) progress.classList.add('hidden');
+            });
+            request.send(new FormData(form));
+        });
+    });
 });
