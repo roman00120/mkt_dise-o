@@ -25,6 +25,18 @@ class CreativeOperationsTest extends TestCase
         $this->actingAs(User::factory()->create(['role' => UserRole::MARKETING]))->get(route('creative.dashboard'))->assertForbidden();
     }
 
+    public function test_pending_requests_are_shown_even_when_older_than_the_dashboard_recent_items(): void
+    {
+        $supervisor = User::factory()->create(['role' => UserRole::SUPERVISOR]);
+        $pending = CreativeRequest::factory()->create(['service' => 'design', 'status' => RequestStatus::PENDING]);
+        CreativeRequest::factory()->count(12)->create(['service' => 'design', 'status' => RequestStatus::IN_PROGRESS]);
+
+        $this->actingAs($supervisor)
+            ->get(route('creative.dashboard'))
+            ->assertOk()
+            ->assertSee($pending->folio);
+    }
+
     public function test_supervisor_can_validate_and_assign_only_matching_active_role(): void
     {
         $supervisor = User::factory()->create(['role' => UserRole::SUPERVISOR]);
