@@ -37,6 +37,17 @@ class CreativeOperationsTest extends TestCase
             ->assertSee($pending->folio);
     }
 
+    public function test_assigned_requests_waiting_for_admin_approval_are_shown_in_validation_queue(): void
+    {
+        $admin = User::factory()->create(['role' => UserRole::ADMIN]);
+        $assigned = CreativeRequest::factory()->create(['service' => 'design', 'status' => RequestStatus::ASSIGNED]);
+
+        $this->actingAs($admin)
+            ->get(route('creative.dashboard'))
+            ->assertOk()
+            ->assertSee($assigned->folio);
+    }
+
     public function test_supervisor_can_validate_and_assign_only_matching_active_role(): void
     {
         $supervisor = User::factory()->create(['role' => UserRole::SUPERVISOR]);
