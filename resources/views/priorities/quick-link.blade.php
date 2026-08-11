@@ -1,0 +1,1 @@
+<a href="{{ route('priorities.index') }}" class="fixed bottom-5 right-5 z-40 inline-flex min-h-11 items-center gap-2 rounded-full bg-red-600 px-4 py-3 text-sm font-extrabold text-white shadow-xl shadow-red-950/40 transition hover:bg-red-500" aria-label="Abrir prioridades">↕ <span>Prioridades</span></a>
