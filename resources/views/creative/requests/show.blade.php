@@ -9,6 +9,16 @@
     <h1 class="mt-3 text-2xl font-bold">{{ $creativeRequest->title ?: 'Sin título' }}</h1>
     <p class="text-sm text-slate-400">{{ $creativeRequest->folio }} · {{ $creativeRequest->service->label() }} · {{ $creativeRequest->status->label() }}</p>
 
+    @if (auth()->user()->hasRole('admin'))
+        <div class="flex justify-end">
+            <form method="POST" action="{{ route('admin.requests.destroy', $creativeRequest) }}" onsubmit="return confirm('Seguro que deseas eliminar esta solicitud? Esta accion quedara registrada.');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="min-h-11 rounded bg-red-700 px-4 py-2 text-sm font-semibold text-white hover:bg-red-600">Eliminar solicitud</button>
+            </form>
+        </div>
+    @endif
+
     <section class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         @foreach ([['Prioridad solicitada', $creativeRequest->requested_priority->label()], ['Prioridad operativa', $creativeRequest->operational_priority?->label() ?? 'No definida'], ['Fecha solicitada', $creativeRequest->required_date?->isoFormat('D MMM YYYY') ?? 'Sin fecha'], ['Fecha interna', $creativeRequest->internal_due_date?->isoFormat('D MMM YYYY') ?? 'Sin fecha interna'], ['Responsable', $creativeRequest->assignee?->name ?? 'Sin asignar']] as [$label, $value])
             <div class="rounded border border-slate-700 bg-slate-900 p-4"><small class="text-slate-400">{{ $label }}</small><strong class="mt-2 block">{{ $value }}</strong></div>
