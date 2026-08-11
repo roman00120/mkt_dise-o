@@ -13,7 +13,8 @@ class CreativeDashboardService
     {
         $base = $this->query->base($user);
         $items = (clone $base)->latest('updated_at')->limit(12)->get();
+        $pendingValidation = (clone $base)->where('status', 'pending')->latest('updated_at')->limit(12)->get();
 
-        return ['mine' => $items->where('assignee_id', $user->id)->values(), 'pendingValidation' => $items->where('status.value', 'pending')->values(), 'unassigned' => $items->whereNull('assignee_id')->values(), 'blocked' => $items->where('status.value', 'waiting_for_information')->values(), 'metrics' => ['total' => (clone $base)->count(), 'pending' => (clone $base)->where('status', 'pending')->count(), 'in_progress' => (clone $base)->where('status', 'in_progress')->count(), 'blocked' => (clone $base)->where('status', 'waiting_for_information')->count()]];
+        return ['mine' => $items->where('assignee_id', $user->id)->values(), 'pendingValidation' => $pendingValidation, 'unassigned' => $items->whereNull('assignee_id')->values(), 'blocked' => $items->where('status.value', 'waiting_for_information')->values(), 'metrics' => ['total' => (clone $base)->count(), 'pending' => (clone $base)->where('status', 'pending')->count(), 'in_progress' => (clone $base)->where('status', 'in_progress')->count(), 'blocked' => (clone $base)->where('status', 'waiting_for_information')->count()]];
     }
 }
