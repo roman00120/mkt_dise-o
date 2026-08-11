@@ -45,6 +45,8 @@ class CreativeOperationsTest extends TestCase
         $this->actingAs($admin)
             ->get(route('creative.dashboard'))
             ->assertOk()
+            ->assertSee($assigned->folio)
+            ->assertSee('1 Pendientes');
             ->assertSee($assigned->folio);
     }
 
