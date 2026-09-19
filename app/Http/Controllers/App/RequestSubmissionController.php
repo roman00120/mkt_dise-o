@@ -7,8 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\CreativeRequest;
 use App\Models\User;
 use App\Notifications\CreativeRequestSubmittedNotification;
-use App\Services\Requests\RequestSubmissionService;
 use App\Services\AI\GeminiRequestReviewService;
+use App\Services\Requests\RequestSubmissionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Throwable;
@@ -24,8 +24,12 @@ class RequestSubmissionController extends Controller
         $updates = ['description' => $data['corrected_text']];
         foreach ($fields as $field) {
             $value = (string) $creativeRequest->{$field};
-            foreach ($data['corrections'] ?? [] as $correction) $value = str_ireplace($correction['original'], $correction['corrected'], $value);
-            if ($field !== 'description' && $value !== (string) $creativeRequest->{$field}) $updates[$field] = $value;
+            foreach ($data['corrections'] ?? [] as $correction) {
+                $value = str_ireplace($correction['original'], $correction['corrected'], $value);
+            }
+            if ($field !== 'description' && $value !== (string) $creativeRequest->{$field}) {
+                $updates[$field] = $value;
+            }
         }
         $creativeRequest->update($updates + ['last_autosaved_at' => now()]);
         $creativeRequest->events()->create(['actor_id' => $request->user()->id, 'event' => 'ai_correction_applied']);
@@ -42,10 +46,12 @@ class RequestSubmissionController extends Controller
         try {
             $result = $reviewer->review($creativeRequest->fresh(['detail', 'files']));
             $creativeRequest->update(['ai_review_status' => $result['status'], 'ai_review_result' => $result, 'ai_reviewed_at' => now(), 'ai_review_error' => null]);
+
             return response()->json(['ok' => true, 'result' => $result]);
         } catch (Throwable $exception) {
             report($exception);
             $creativeRequest->update(['ai_review_status' => 'error', 'ai_review_error' => 'No fue posible completar la revisión.']);
+
             return response()->json(['ok' => false, 'message' => 'La revisión no está disponible. Puedes reintentar o enviar manualmente.'], 503);
         }
     }

@@ -1,4 +1,5 @@
 <?php
+
 require_once 'config.php';
 
 $page = isset($_GET['page']) ? $_GET['page'] : 'login';
@@ -14,21 +15,21 @@ switch ($page) {
         include 'views/login.html';
         break;
     case 'dashboard':
-        if (!isset($_SESSION['user_type'])) {
+        if (! isset($_SESSION['user_type'])) {
             header('Location: index.php?page=login');
             exit;
         }
         include 'views/dashboard.html';
         break;
     case 'create-ticket':
-        if (!isset($_SESSION['user_type'])) {
+        if (! isset($_SESSION['user_type'])) {
             header('Location: index.php?page=login');
             exit;
         }
         include 'views/create-ticket.html';
         break;
     case 'ticket':
-        if (!isset($_SESSION['user_type'])) {
+        if (! isset($_SESSION['user_type'])) {
             header('Location: index.php?page=login');
             exit;
         }
@@ -41,4 +42,3 @@ switch ($page) {
     default:
         include 'views/login.html';
 }
-

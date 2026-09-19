@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . '/../config.php';
+
+require_once __DIR__.'/../config.php';
 
 /**
  * Script de Limpieza Mensual y Reporte de KPIs
@@ -10,7 +11,7 @@ require_once __DIR__ . '/../config.php';
 // Simple seguridad por token (opcional, puedes cambiar el valor)
 $security_token = 'TotalGround_Monthly_2025';
 if (isset($_GET['token']) && $_GET['token'] !== $security_token) {
-    die('Acceso denegado.');
+    exit('Acceso denegado.');
 }
 
 // Obtener tickets actuales
@@ -18,7 +19,7 @@ $tickets = get_all_tickets();
 
 if (empty($tickets)) {
     // Si no hay tickets, no hay nada que reportar ni borrar
-    echo "No hay tickets para procesar.";
+    echo 'No hay tickets para procesar.';
     exit;
 }
 
@@ -27,7 +28,7 @@ $total_tickets = count($tickets);
 $stats = [
     'status' => [],
     'department' => [],
-    'priority' => []
+    'priority' => [],
 ];
 
 foreach ($tickets as $ticket) {
@@ -42,7 +43,7 @@ foreach ($tickets as $ticket) {
 
 // 2. Generar Reporte HTML
 $month_name = date('F Y', strtotime('last month'));
-$subject = "[REPORTE MENSUAL] KPIs de Tickets - " . $month_name;
+$subject = '[REPORTE MENSUAL] KPIs de Tickets - '.$month_name;
 
 $message = "
 <html>
@@ -64,12 +65,12 @@ $message = "
     <div class='container'>
         <div class='header'>
             <h1>Reporte Mensual de Tickets</h1>
-            <p>Resumen del periodo: " . $month_name . "</p>
+            <p>Resumen del periodo: ".$month_name."</p>
         </div>
 
         <div class='section'>
             <h3>Resumen General</h3>
-            <p class='total'>Total de tickets generados: " . $total_tickets . "</p>
+            <p class='total'>Total de tickets generados: ".$total_tickets."</p>
         </div>
 
         <div class='section'>
@@ -135,15 +136,14 @@ if ($sent || $debug_mode) {
     $success = save_tickets([]);
     if ($success) {
         update_last_cleanup(date('Y-m-d'));
-        if (!$sent && $debug_mode) {
+        if (! $sent && $debug_mode) {
             echo "Aviso: El correo NO se envi� (error en mail()), pero los tickets se borraron por modo DEBUG/CLI.\n";
         } else {
-            echo "Reporte enviado con �xito y tickets resetados.";
+            echo 'Reporte enviado con �xito y tickets resetados.';
         }
     } else {
-        echo "Reporte enviado, pero hubo un error al borrar los tickets.";
+        echo 'Reporte enviado, pero hubo un error al borrar los tickets.';
     }
 } else {
-    echo "Error al enviar el correo. No se borraron los tickets por seguridad.";
+    echo 'Error al enviar el correo. No se borraron los tickets por seguridad.';
 }
-
