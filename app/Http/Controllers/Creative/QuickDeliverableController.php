@@ -23,8 +23,8 @@ class QuickDeliverableController extends Controller
     ): RedirectResponse {
         $request->validate([
             'files' => ['nullable', 'array'],
-            'files.*' => ['file', 'max:51200'],
-            'file' => ['nullable', 'file', 'max:51200'],
+            'files.*' => ['file', 'max:102400'],
+            'file' => ['nullable', 'file', 'max:102400'],
             'notes' => ['nullable', 'string', 'max:1000'],
         ]);
 

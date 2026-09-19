@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Ticket - Sistema de Tickets</title>
+    <link rel="stylesheet" href="/tickets/public/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="nav-left">
+                <h1>Sistema de Tickets</h1>
+                <span>Total Ground</span>
+            </div>
+            <div class="nav-right">
+                <a href="/tickets/index.php?page=dashboard" class="btn btn-secondary">Volver</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="form-container">
+            <h2>Crear Nuevo Ticket</h2>
+
+            <form id="create-form">
+                <div class="form-group">
+                    <label for="title">Título *</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="creator_name">Tu Nombre *</label>
+                    <input type="text" id="creator_name" name="creator_name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Descripción *</label>
+                    <textarea id="description" name="description" rows="6" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="department">Departamento *</label>
+                    <select id="department" name="department" required>
+                        <option value="">-- Selecciona departamento --</option>
+                        <option value="Administración">Administración</option>
+                        <option value="Torno">Torno</option>
+                        <option value="Producción">Producción</option>
+                        <option value="Almacén de materia prima">Almacén de materia prima</option>
+                        <option value="Almacén de instalaciones">Almacén de instalaciones</option>
+                        <option value="Almacén de producto terminado">Almacén de producto terminado</option>
+                        <option value="Logística">Logística</option>
+                        <option value="Sistemas - Diseño - Multimedia">Sistemas - Diseño - Multimedia</option>
+                        <option value="Electrónica">Electrónica</option>
+                        <option value="Dirección Comercial / Mercadotecnia">Dirección Comercial / Mercadotecnia</option>
+                        <option value="Ventas Internas">Ventas Internas</option>
+                        <option value="Ventas Externas">Ventas Externas</option>
+                        <option value="Occidente y Bajío (ZMG y León, Gto.)">Occidente y Bajío (ZMG y León, Gto.)
+                        </option>
+                        <option value="Norte (La Paz, Tijuana, Monterrey, Hermosillo)">Norte (La Paz, Tijuana,
+                            Monterrey, Hermosillo)</option>
+                        <option value="CDMX">CDMX</option>
+                        <option value="Sureste (Mérida)">Sureste (Mérida)</option>
+                        <option value="Recepción">Recepción</option>
+                        <option value="Proyectos Especiales">Proyectos Especiales</option>
+                        <option value="Grafito">Grafito</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="priority">Prioridad *</label>
+                    <select id="priority" name="priority" required>
+                        <option value="">-- Selecciona prioridad --</option>
+                        <option value="baja">Baja</option>
+                        <option value="media">Media</option>
+                        <option value="alta">Alta</option>
+                        <option value="urgente">Urgente</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="attachment">Archivo adjunto (opcional)</label>
+                    <input type="file" id="attachment" name="attachment" accept=".pdf,.png,.jpg,.jpeg,.gif,.webp,.zip,.doc,.docx,.xls,.xlsx,.txt,.mp4,.mov">
+                    <small>Máximo 100 MB. Puedes adjuntar imágenes, documentos, ZIP o videos.</small>
+                </div>
+
+
+                <div class="form-actions">
+                    <a href="/tickets/index.php?page=dashboard" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-primary">Crear Ticket</button>
+                </div>
+
+                <div id="message" style="margin-top: 15px;"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        async function checkSession() {
+            try {
+                const response = await fetch('/tickets/api/auth.php?action=check-session');
+                const data = await response.json();
+                if (data.authenticated && data.department) {
+                    const deptSelect = document.getElementById('department');
+                    deptSelect.value = data.department;
+                    deptSelect.disabled = true;
+                }
+            } catch (error) {
+                console.error('Error checking session:', error);
+            }
+        }
+
+        checkSession();
+
+        document.getElementById('create-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const title = document.getElementById('title').value;
+            const creator_name = document.getElementById('creator_name').value;
+            const description = document.getElementById('description').value;
+            // Get department even if disabled
+            const department = document.getElementById('department').value;
+            const priority = document.getElementById('priority').value;
+
+            try {
+                const response = await fetch('/tickets/api/tickets.php?action=create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, creator_name, description, department, priority })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    const attachment = document.getElementById('attachment').files[0];
+                    if (attachment && data.ticket && data.ticket.id) {
+                        const form = new FormData(); form.append('id', data.ticket.id); form.append('file', attachment);
+                        const upload = await fetch('/tickets/api/tickets.php?action=upload', { method: 'POST', body: form });
+                        const uploadData = await upload.json();
+                        if (!uploadData.success) { alert(uploadData.error || 'El ticket se creó, pero el archivo no pudo adjuntarse.'); }
+                    }
+                    const message = document.getElementById('message');
+                    message.innerHTML = '<div style="padding:16px 18px;border:1px solid #86efac;border-radius:10px;background:#f0fdf4;color:#166534;font-weight:600">✓ Ticket creado correctamente<br><small style="font-weight:400">Te estamos llevando al tablero...</small></div>';
+                    setTimeout(() => { window.location.href = '/tickets/index.php?page=dashboard'; }, 1400);
+                } else {
+                    alert('Error: ' + (data.error || 'Error desconocido'));
+                }
+            } catch (error) {
+                alert('Error de conexión');
+            }
+        });
+    </script>
+    <script src="/tickets/public/theme.js"></script>
+</body>
+
+</html>
+
+

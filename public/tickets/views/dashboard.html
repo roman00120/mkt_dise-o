@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sistema de Tickets | Total Ground</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/tickets/public/style.css?v=2.1">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="nav-left">
+                <div class="brand-logo-badge">TG</div>
+                <div class="brand-title-group">
+                    <h1>Sistema de Tickets</h1>
+                    <span class="brand-sub">Total Ground · Gestión Operativa</span>
+                </div>
+            </div>
+            <div class="nav-right">
+                <span id="user-info" class="user-info"></span>
+                <a href="/tickets/index.php?page=logout" class="btn btn-secondary btn-sm btn-logout">
+                    <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    <span>Cerrar Sesión</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- HEADER PRINCIPAL -->
+        <div class="dashboard-header">
+            <div class="header-main-info">
+                <div class="header-badge">
+                    <span class="badge-dot-live"></span>
+                    <span>Mesa de Control y Soporte</span>
+                </div>
+                <h2>Mis Tickets</h2>
+                <p class="header-subtitle">Monitorea en tiempo real el progreso, prioridades y tiempos de respuesta de cada incidencia.</p>
+            </div>
+            <div class="dashboard-actions">
+                <div class="notifications-wrapper">
+                    <button id="notifications-button" class="btn btn-notifications" type="button" aria-label="Abrir centro de notificaciones">
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                        <span>Notificaciones</span>
+                        <span id="notifications-count" class="notifications-count-badge">0</span>
+                    </button>
+                    <!-- DROPDOWN NOTIFICACIONES -->
+                    <div id="notifications-panel" class="notifications-dropdown-panel" style="display:none"></div>
+                </div>
+
+                <a href="/tickets/index.php?page=create-ticket" class="btn btn-primary btn-create">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>Crear Ticket</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- STATS KPI GRID -->
+        <div class="stats-grid">
+            <div class="stat-box stat-total">
+                <div class="stat-number" id="stat-total">0</div>
+                <div class="stat-text">Total Tickets</div>
+            </div>
+            <div class="stat-box stat-open">
+                <div class="stat-number" id="stat-open">0</div>
+                <div class="stat-text">Abiertos</div>
+            </div>
+            <div class="stat-box stat-process">
+                <div class="stat-number" id="stat-process">0</div>
+                <div class="stat-text">En Proceso</div>
+            </div>
+            <div class="stat-box stat-closed">
+                <div class="stat-number" id="stat-closed">0</div>
+                <div class="stat-text">Cerrados</div>
+            </div>
+            <div class="stat-box highlight stat-overdue">
+                <div class="stat-number" id="stat-overdue">0</div>
+                <div class="stat-text">Vencidos</div>
+            </div>
+            <div class="stat-box stat-average">
+                <div class="stat-number" id="stat-average">0h</div>
+                <div class="stat-text">Promedio Resolución</div>
+            </div>
+            <div class="stat-box highlight stat-urgent">
+                <div class="stat-number" id="stat-urgent">0</div>
+                <div class="stat-text">Urgentes</div>
+            </div>
+        </div>
+
+        <!-- BARRA DE FILTROS -->
+        <div class="filters">
+            <div class="filter-search-wrap">
+                <svg class="filter-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="search" placeholder="Buscar por título, folio o palabra clave..." class="form-control form-control-search">
+            </div>
+            <select id="status-filter" class="form-control">
+                <option value="">Todos los estados</option>
+                <option value="abierto">Abierto</option>
+                <option value="en_proceso">En Proceso</option>
+                <option value="cerrado">Cerrado</option>
+            </select>
+            <select id="priority-filter" class="form-control">
+                <option value="">Todas las prioridades</option>
+                <option value="baja">Baja</option>
+                <option value="media">Media</option>
+                <option value="alta">Alta</option>
+                <option value="urgente">Urgente</option>
+            </select>
+            <select id="department-filter" class="form-control"><option value="">Todos los departamentos</option></select>
+            <select id="assignee-filter" class="form-control"><option value="">Todos los responsables</option></select>
+            <input type="date" id="date-from" class="form-control filter-date" title="Desde">
+            <input type="date" id="date-to" class="form-control filter-date" title="Hasta">
+        </div>
+
+        <!-- LISTADO DE TICKETS -->
+        <div id="tickets-container" class="tickets-container">
+            <p class="loading">Cargando tickets...</p>
+        </div>
+    </div>
+
+    <script src="/tickets/public/theme.js"></script>
+    <script src="/tickets/public/dashboard.js?v=2.1"></script>
+</body>
+
+</html>
+
+

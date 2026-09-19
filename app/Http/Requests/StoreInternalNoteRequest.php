@@ -13,6 +13,6 @@ class StoreInternalNoteRequest extends FormRequest
 
     public function rules(): array
     {
-        return ['body' => ['required', 'string', 'max:5000'], 'mentions' => ['array', 'max:10'], 'mentions.*' => ['integer', 'distinct', 'exists:users,id'], 'attachments' => ['array', 'max:5'], 'attachments.*' => ['file', 'max:15360']];
+        return ['body' => ['required', 'string', 'max:5000'], 'mentions' => ['array', 'max:10'], 'mentions.*' => ['integer', 'distinct', 'exists:users,id'], 'attachments' => ['array', 'max:5'], 'attachments.*' => ['file', 'max:102400']];
     }
 }

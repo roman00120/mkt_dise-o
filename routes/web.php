@@ -93,6 +93,8 @@ Route::middleware(['auth', 'active', 'password.changed'])->group(function (): vo
         Route::post('/app/requests/drafts/{creativeRequest}/files', [RequestFileController::class, 'store'])->middleware('role:marketing')->name('app.requests.drafts.files.store');
         Route::delete('/app/requests/drafts/{creativeRequest}/files/{file}', [RequestFileController::class, 'destroy'])->middleware('role:marketing')->name('app.requests.drafts.files.destroy');
         Route::post('/app/requests/drafts/{creativeRequest}/submit', [RequestSubmissionController::class, 'submit'])->middleware('role:marketing')->name('app.requests.drafts.submit');
+        Route::post('/app/requests/drafts/{creativeRequest}/ai-review', [RequestSubmissionController::class, 'review'])->middleware(['role:marketing', 'throttle:5,1'])->name('app.requests.drafts.ai-review');
+        Route::post('/app/requests/drafts/{creativeRequest}/ai-review/apply-correction', [RequestSubmissionController::class, 'applyCorrection'])->middleware('role:marketing')->name('app.requests.drafts.ai-review.apply-correction');
         Route::get('/app/requests/{creativeRequest}/confirmation', [RequestSubmissionController::class, 'confirmation'])->name('app.requests.confirmation');
         Route::post('/app/requests/{creativeRequest}/provide-information', RequestInformationResponseController::class)->middleware('role:marketing')->name('app.requests.provide-information');
         Route::post('/app/requests/{creativeRequest}/comments', [AppRequestCommentController::class, 'store'])->middleware('role:marketing')->name('app.requests.comments.store');

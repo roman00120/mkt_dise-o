@@ -6,7 +6,11 @@
 @php($details = $requestModel?->detail?->data ?? [])
 @php($currentService = $service ?? $requestModel?->service?->value)
 @php($value = fn (string $key, mixed $fallback = '') => old($key, $requestModel?->{$key} ?? $fallback))
-<div class="mx-auto max-w-5xl space-y-6" x-data="{ step: {{ $step }}, saving: false }">
+<div class="mx-auto max-w-6xl space-y-8" x-data="{ step: {{ $step }}, saving: false }">
+    <style>
+        .wizard-type-option { min-height: 4.25rem; }
+        .wizard-type-option span:last-child { font-size: .9rem; line-height: 1.35rem; }
+    </style>
     <div class="flex flex-wrap items-end justify-between gap-4"><div><p class="ds-kicker">Solicitud creativa</p><h1 class="mt-2 text-2xl font-bold">{{ $step === 7 ? 'Solicitud enviada' : 'Crea una nueva solicitud' }}</h1><p class="mt-2 text-sm text-[var(--color-text-secondary)]">Completa los pasos con la información disponible. Puedes guardar un borrador en cualquier momento.</p></div>@if($isDraft)<span class="text-xs text-[var(--color-text-tertiary)]">Folio {{ $requestModel->folio }} · Paso {{ $step }} de 6</span>@endif</div>
     <x-wizard.stepper :steps="['Servicio', 'Tipo', 'Brief', 'Archivos', 'Fecha y prioridad', 'Revisión']" :current="$step - 1" />
     @if(session('status'))<x-ui.alert variant="success">{{ session('status') }}</x-ui.alert>@endif
@@ -48,10 +52,10 @@
                                 </span>
                             </div>
 
-                            <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                            <div class="grid gap-4 sm:grid-cols-2">
                                 @foreach($catalog as $key => $label)
                                     @if(in_array($key, ['flyer_rrss', 'rrss_cover', 'carousel', 'infographic_product', 'infographic_installation', 'infographic_other', 'invitation_ccad', 'invitation_cert', 'image_editing', 'seminar', 'presentation', 'tech_sheet', 'distributor_brochure', 'distributor_rrss', 'distributor_catalog', 'digital_stationery']))
-                                        <label class="flex min-h-14 cursor-pointer items-center gap-3 rounded-xl border border-slate-800 bg-slate-950/70 p-4 transition hover:border-slate-600 has-[:checked]:border-red-500 has-[:checked]:bg-red-500/10 shadow">
+                                        <label class="wizard-type-option flex min-h-14 cursor-pointer items-center gap-3 rounded-xl border border-slate-800 bg-slate-950/70 p-4 transition hover:border-slate-600 has-[:checked]:border-red-500 has-[:checked]:bg-red-500/10 shadow">
                                             <input type="radio" name="request_type" value="{{ $key }}" x-model="selectedType" @checked($requestModel?->request_type === $key) class="text-red-600 focus:ring-red-500">
                                             <span class="text-xs sm:text-sm font-bold text-white leading-snug">{{ $label }}</span>
                                         </label>
@@ -121,10 +125,10 @@
                                 </span>
                             </div>
 
-                            <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                            <div class="grid gap-4 sm:grid-cols-2">
                                 @foreach($catalog as $key => $label)
                                     @if(in_array($key, ['tarp_spider', 'tarp_large_format', 'tarp_banner', 'vinyl', 'product_brochure', 'flyers_print', 'expo_stand', 'warehouse_labels', 'product_labels', 'silkscreen', 'business_card_paper', 'business_card_pvc', 'badges_pvc', 'letterhead_legal', 'letterhead_letter']))
-                                        <label class="flex min-h-14 cursor-pointer items-center gap-3 rounded-xl border border-slate-800 bg-slate-950/70 p-4 transition hover:border-slate-600 has-[:checked]:border-red-500 has-[:checked]:bg-red-500/10 shadow">
+                                        <label class="wizard-type-option flex min-h-14 cursor-pointer items-center gap-3 rounded-xl border border-slate-800 bg-slate-950/70 p-4 transition hover:border-slate-600 has-[:checked]:border-red-500 has-[:checked]:bg-red-500/10 shadow">
                                             <input type="radio" name="request_type" value="{{ $key }}" x-model="selectedType" @checked($requestModel?->request_type === $key) class="text-red-600 focus:ring-red-500">
                                             <span class="text-xs sm:text-sm font-bold text-white leading-snug">{{ $label }}</span>
                                         </label>
@@ -145,10 +149,10 @@
                                 </span>
                             </div>
 
-                            <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                            <div class="grid gap-4 sm:grid-cols-2">
                                 @foreach($catalog as $key => $label)
                                     @if($key === 'other')
-                                        <label class="flex min-h-14 cursor-pointer items-center gap-3 rounded-xl border border-slate-800 bg-slate-950/70 p-4 transition hover:border-slate-600 has-[:checked]:border-red-500 has-[:checked]:bg-red-500/10 shadow">
+                                        <label class="wizard-type-option flex min-h-14 cursor-pointer items-center gap-3 rounded-xl border border-slate-800 bg-slate-950/70 p-4 transition hover:border-slate-600 has-[:checked]:border-red-500 has-[:checked]:bg-red-500/10 shadow">
                                             <input type="radio" name="request_type" value="{{ $key }}" x-model="selectedType" @checked($requestModel?->request_type === $key) class="text-red-600 focus:ring-red-500">
                                             <span class="text-xs sm:text-sm font-bold text-white leading-snug">{{ $label }}</span>
                                         </label>
@@ -158,9 +162,9 @@
                         </div>
                     @else
                         <!-- Otros servicios (Video, Render) -->
-                        <div class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                        <div class="mt-6 grid gap-4 sm:grid-cols-2">
                             @foreach($catalog as $key => $label)
-                                <label class="flex min-h-14 cursor-pointer items-center gap-3 rounded-xl border border-slate-800 bg-slate-950/70 p-4 transition hover:border-slate-600 has-[:checked]:border-red-500 has-[:checked]:bg-red-500/10 shadow">
+                                <label class="wizard-type-option flex min-h-14 cursor-pointer items-center gap-3 rounded-xl border border-slate-800 bg-slate-950/70 p-4 transition hover:border-slate-600 has-[:checked]:border-red-500 has-[:checked]:bg-red-500/10 shadow">
                                     <input type="radio" name="request_type" value="{{ $key }}" x-model="selectedType" @checked($requestModel?->request_type === $key) class="text-red-600 focus:ring-red-500">
                                     <span class="text-xs sm:text-sm font-bold text-white leading-snug">{{ $label }}</span>
                                 </label>
@@ -216,4 +220,3 @@
     @endif
 </div>
 @endsection
-

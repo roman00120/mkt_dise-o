@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Ticket - Sistema de Tickets</title>
+    <link rel="stylesheet" href="/tickets/public/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="nav-left">
+                <h1>Sistema de Tickets</h1>
+                <span>Total Ground</span>
+            </div>
+            <div class="nav-right">
+                <a href="/tickets/index.php?page=dashboard" class="btn btn-secondary">Volver</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="ticket-container" class="ticket-detail-container">
+            <p class="loading">Cargando ticket...</p>
+        </div>
+    </div>
+
+    <script>
+        const ticketId = new URLSearchParams(window.location.search).get('id');
+
+        if (!ticketId) {
+            document.getElementById('ticket-container').innerHTML = '<p>Ticket no válido</p>';
+        } else {
+            loadTicket();
+        }
+
+        async function loadTicket() {
+            try {
+                const response = await fetch(`/tickets/api/tickets.php?action=get&id=${ticketId}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    displayTicket(data.ticket);
+                } else {
+                    document.getElementById('ticket-container').innerHTML = '<p>Ticket no encontrado</p>';
+                }
+            } catch (error) {
+                document.getElementById('ticket-container').innerHTML = '<p>Error cargando ticket</p>';
+            }
+        }
+
+        function displayTicket(ticket) {
+            const container = document.getElementById('ticket-container');
+            const statusColor = ticket.status === 'cerrado' ? '#DC2626' : ticket.status === 'en_proceso' ? '#F59E0B' : '#3B82F6';
+
+            container.innerHTML = `
+                <div class="ticket-detail-header">
+                    <div>
+                        <h2>${ticket.folio || ('#' + ticket.id)}</h2>
+                        <h3>${ticket.title}</h3>
+                    </div>
+                    <span class="badge badge-${ticket.status}" style="background-color: ${statusColor}20; color: ${statusColor}">
+                        ${ticket.status.toUpperCase()}
+                    </span>
+                </div>
+
+                <div class="detail-grid">
+                    <div class="detail-field">
+                        <label>Descripción</label>
+                        <p class="ticket-description">${ticket.description}</p>
+                    </div>
+
+                    <div class="detail-field">
+                        <label>Departamento</label>
+                        <p>${ticket.department}</p>
+                    </div>
+
+                    <div class="detail-field">
+                        <label>Prioridad</label>
+                        <p class="ticket-priority priority-${ticket.priority}">${ticket.priority}</p>
+                    </div>
+
+                    <div class="detail-field">
+                        <label>Creador</label>
+                        <p>${ticket.creator}</p>
+                    </div>
+
+                    <div class="detail-field">
+                        <label>Fecha Creación</label>
+                        <p>${new Date(ticket.created_at).toLocaleDateString('es-ES')}</p>
+                    </div>
+
+                    <div class="detail-field">
+                        <label>Última Actualización</label>
+                        <p>${new Date(ticket.updated_at).toLocaleDateString('es-ES')}</p>
+                    </div>
+                </div>
+
+                <div class="detail-field" style="margin-top:24px"><label>Comentarios</label><div id="comments-list">${(ticket.comments || []).map(c => `<p><strong>${c.actor}</strong> · ${new Date(c.at).toLocaleString('es-MX')}<br>${c.message}</p>`).join('') || '<p>Aún no hay comentarios.</p>'}</div><textarea id="comment-message" rows="3" placeholder="Escribe un comentario..."></textarea><button onclick="addComment(${ticket.id})" class="btn btn-primary" style="margin-top:10px">Agregar comentario</button></div>
+                <div class="detail-field" style="margin-top:24px"><label>Historial operativo</label><div>${(ticket.history || []).map(h => `<p><strong>${h.actor}</strong> · ${new Date(h.at).toLocaleString('es-MX')} · ${h.action}${h.detail ? ': ' + h.detail : ''}</p>`).join('') || '<p>Sin movimientos registrados.</p>'}</div></div>
+                <div class="detail-field" style="margin-top:24px"><label>Archivos adjuntos</label><div>${(ticket.attachments || []).map(a => `<p><a href="/tickets/api/tickets.php?action=download&id=${ticket.id}&file=${encodeURIComponent(a.file)}">${a.name}</a></p>`).join('') || '<p>No hay archivos adjuntos.</p>'}</div><input type="file" id="ticket-file" style="margin-top:10px"><button onclick="uploadAttachment(${ticket.id})" class="btn btn-primary" style="margin-top:10px">Subir archivo</button><small> Máximo 100 MB</small></div>
+                <div id="admin-section"></div>
+            `;
+
+            checkAdminAccess(ticket);
+        }
+
+        async function addComment(id) {
+            const input = document.getElementById('comment-message');
+            const message = input.value.trim();
+            if (!message) return;
+            const response = await fetch('/tickets/api/tickets.php?action=comment', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id, message})});
+            const data = await response.json();
+            if (data.success) location.reload(); else alert(data.error || 'No fue posible agregar el comentario');
+        }
+        async function uploadAttachment(id) { const input=document.getElementById('ticket-file'); if(!input.files.length)return; const form=new FormData(); form.append('id',id); form.append('file',input.files[0]); const r=await fetch('/tickets/api/tickets.php?action=upload',{method:'POST',body:form}); const d=await r.json(); if(d.success)location.reload(); else alert(d.error||'No fue posible subir el archivo'); }
+
+        async function checkAdminAccess(ticket) {
+            try {
+                const response = await fetch('/tickets/api/auth.php?action=check-session');
+                const data = await response.json();
+                if (data.authenticated && data.user_type === 'admin') {
+                    showAdminOptions(ticket);
+                }
+            } catch (error) {
+                console.error('Error checking admin access:', error);
+            }
+        }
+
+        function showAdminOptions(ticket) {
+            const adminSection = document.getElementById('admin-section');
+            adminSection.innerHTML = `
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+                    <h3>Acciones de Administrador</h3>
+                    <div class="form-actions" style="margin-top: 15px;">
+                        <label>Responsable <select id="assigned-to"><option value="">Sin asignar</option><option value="Roman" ${ticket.assigned_to === 'Roman' ? 'selected' : ''}>Roman</option><option value="Angel" ${ticket.assigned_to === 'Angel' ? 'selected' : ''}>Angel</option></select></label>
+                        <button onclick="assignTicket(${ticket.id})" class="btn btn-secondary">Guardar responsable</button>
+                        ${ticket.status !== 'cerrado' ? `
+                            <button onclick="updateStatus('en_proceso', ${ticket.id})" class="btn btn-primary">
+                                En Proceso
+                            </button>
+                            <button onclick="closeTicket(${ticket.id})" class="btn btn-danger">
+                                Cerrar Ticket
+                            </button>
+                        ` : ''}
+                        <button onclick="deleteTicket(${ticket.id})" class="btn btn-danger" style="background-color: #991b1b;">
+                            Eliminar Ticket
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function updateStatus(newStatus, ticketId) {
+            try {
+                const response = await fetch('/tickets/api/tickets.php?action=update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: ticketId, updates: { status: newStatus } })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert('Ticket actualizado');
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error de conexión');
+            }
+        }
+        async function assignTicket(id) { const value=document.getElementById('assigned-to').value.trim(); const r=await fetch('/tickets/api/tickets.php?action=update',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,updates:{assigned_to:value}})}); const d=await r.json(); if(d.success)location.reload(); else alert(d.error||'No fue posible asignar'); }
+
+        async function closeTicket(ticketId) {
+            if (confirm('¿Cerrar este ticket?')) {
+                try {
+                    const response = await fetch('/tickets/api/tickets.php?action=close', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: ticketId })
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        alert('Ticket cerrado');
+                        window.location.href = '/tickets/index.php?page=dashboard';
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                } catch (error) {
+                    alert('Error de conexión');
+                }
+            }
+        }
+
+        async function deleteTicket(ticketId) {
+            if (confirm('¿Estás seguro de que deseas eliminar permanentemente este ticket?')) {
+                try {
+                    const response = await fetch('/tickets/api/tickets.php?action=delete', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id: ticketId })
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        alert('Ticket eliminado exitosamente');
+                        window.location.href = '/tickets/index.php?page=dashboard';
+                    } else {
+                        alert('Error: ' + (data.error || 'Error al eliminar'));
+                    }
+                } catch (error) {
+                    alert('Error de conexión');
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
+
+

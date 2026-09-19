@@ -13,7 +13,7 @@ class RequestFileController extends Controller
     public function store(Request $request, CreativeRequest $creativeRequest, RequestFileService $files)
     {
         $this->authorize('update', $creativeRequest);
-        $request->validate(['file' => ['required', 'file', 'max:25600', 'mimes:pdf,jpg,jpeg,png,webp,doc,docx,xls,xlsx,ppt,pptx,mp4,mov,zip'], 'category' => ['nullable', 'in:reference,technical,brief']]);
+        $request->validate(['file' => ['required', 'file', 'max:102400'], 'category' => ['nullable', 'in:reference,technical,brief']]);
         $files->store($creativeRequest, $request->file('file'), $request->string('category', 'reference')->toString());
 
         return back()->with('status', 'Archivo agregado');

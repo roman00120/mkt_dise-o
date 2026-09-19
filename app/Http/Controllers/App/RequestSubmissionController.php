@@ -8,11 +8,48 @@ use App\Models\CreativeRequest;
 use App\Models\User;
 use App\Notifications\CreativeRequestSubmittedNotification;
 use App\Services\Requests\RequestSubmissionService;
+use App\Services\AI\GeminiRequestReviewService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
+use Throwable;
 
 class RequestSubmissionController extends Controller
 {
+    public function applyCorrection(Request $request, CreativeRequest $creativeRequest)
+    {
+        $this->authorize('update', $creativeRequest);
+        abort_unless($creativeRequest->isDraft(), 409);
+        $data = $request->validate(['corrected_text' => ['required', 'string', 'max:10000'], 'corrections' => ['array', 'max:50'], 'corrections.*.original' => ['required', 'string', 'max:200'], 'corrections.*.corrected' => ['required', 'string', 'max:200']]);
+        $fields = ['title', 'description', 'objective', 'target_audience', 'channel', 'urgency_reason', 'other_request_type'];
+        $updates = ['description' => $data['corrected_text']];
+        foreach ($fields as $field) {
+            $value = (string) $creativeRequest->{$field};
+            foreach ($data['corrections'] ?? [] as $correction) $value = str_ireplace($correction['original'], $correction['corrected'], $value);
+            if ($field !== 'description' && $value !== (string) $creativeRequest->{$field}) $updates[$field] = $value;
+        }
+        $creativeRequest->update($updates + ['last_autosaved_at' => now()]);
+        $creativeRequest->events()->create(['actor_id' => $request->user()->id, 'event' => 'ai_correction_applied']);
+
+        return response()->json(['ok' => true]);
+    }
+
+    public function review(Request $request, CreativeRequest $creativeRequest, GeminiRequestReviewService $reviewer)
+    {
+        $this->authorize('update', $creativeRequest);
+        abort_unless($creativeRequest->isDraft(), 409);
+        $creativeRequest->update(['ai_review_status' => 'reviewing', 'ai_review_error' => null]);
+
+        try {
+            $result = $reviewer->review($creativeRequest->fresh(['detail', 'files']));
+            $creativeRequest->update(['ai_review_status' => $result['status'], 'ai_review_result' => $result, 'ai_reviewed_at' => now(), 'ai_review_error' => null]);
+            return response()->json(['ok' => true, 'result' => $result]);
+        } catch (Throwable $exception) {
+            report($exception);
+            $creativeRequest->update(['ai_review_status' => 'error', 'ai_review_error' => 'No fue posible completar la revisión.']);
+            return response()->json(['ok' => false, 'message' => 'La revisión no está disponible. Puedes reintentar o enviar manualmente.'], 503);
+        }
+    }
+
     public function submit(Request $request, CreativeRequest $creativeRequest, RequestSubmissionService $submission)
     {
         $this->authorize('update', $creativeRequest);

@@ -1,0 +1,16 @@
+﻿{
+  "tickets": [
+    {
+      "id": "TKT-1765482555125-y1c5elb4k",
+      "titulo": "prueba",
+      "descripcion": "321",
+      "departamento": "Administraci�n",
+      "prioridad": "Alta",
+      "estado": "Abierto",
+      "creador": "juan perez",
+      "fechaCreacion": "2025-12-11T19:49:15.125Z",
+      "fechaActualizacion": "2025-12-11T19:49:15.125Z",
+      "comentarios": []
+    }
+  ]
+}

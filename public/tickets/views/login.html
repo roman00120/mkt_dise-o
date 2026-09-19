@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Sistema de Tickets</title>
+  <link rel="stylesheet" href="/tickets/public/style.css">
+</head>
+
+
+
+<script src="/tickets/public/theme.js"></script>
+
+
+<body>
+
+  <body>
+
+    <div class="dark-mode-toggle">
+      <span>Modo Oscuro</span>
+      <label class="switch">
+        <input type="checkbox" id="darkToggle">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="auth-container">
+
+      <!-- Tutorial Video Section (only visible for collaborators) -->
+      <div class="tutorial-video-container" id="tutorial-video">
+        <div class="video-wrapper">
+          <h3>Tutorial: Cómo usar el sistema</h3>
+          <video controls>
+            <source src="/tickets/TICKETS.mp4" type="video/mp4">
+            Tu navegador no soporta la reproducción de videos.
+          </video>
+          <p class="video-description">Aprende a crear y gestionar tickets en pocos minutos</p>
+        </div>
+      </div>
+
+      <div class="auth-card">
+        <div class="auth-header">
+          <img src="/tickets/total.webp" class="login-logo" alt="Logo">
+
+          <h1 class="title-inline">
+            <img src="/tickets/soporte.png" class="title-icon" alt="Punta">
+            Sistema de Tickets
+          </h1>
+
+        </div>
+
+        <div class="auth-tabs">
+          <button class="tab-btn active" data-tab="collaborator">Colaborador</button>
+          <button class="tab-btn" data-tab="admin">Administrador</button>
+        </div>
+
+
+
+        <div id="collaborator-tab" class="tab-content active">
+          <form id="collaborator-form">
+            <div class="form-group">
+              <label for="department">Selecciona tu departamento:</label>
+              <select id="department" name="department" required>
+                <option value="">-- Selecciona un departamento --</option>
+                <option value="Administración">Administración</option>
+                <option value="Torno">Torno</option>
+                <option value="Producción">Producción</option>
+                <option value="Almacén de materia prima">Almacén de materia prima</option>
+                <option value="Almacén de instalaciones">Almacén de instalaciones</option>
+                <option value="Almacén de producto terminado">Almacén de producto terminado</option>
+                <option value="Logística">Logística</option>
+                <option value="Sistemas - Diseño - Multimedia">Sistemas - Diseño - Multimedia</option>
+                <option value="Electrónica">Electrónica</option>
+                <option value="Dirección Comercial / Mercadotecnia">Dirección Comercial / Mercadotecnia</option>
+                <option value="Ventas Internas">Ventas Internas</option>
+                <option value="Ventas Externas">Ventas Externas</option>
+                <option value="Occidente y Bajío (ZMG y León, Gto.)">Occidente y Bajío (ZMG y León, Gto.)</option>
+                <option value="Norte (La Paz, Tijuana, Monterrey, Hermosillo)">Norte (La Paz, Tijuana, Monterrey,
+                  Hermosillo)</option>
+                <option value="CDMX">CDMX</option>
+                <option value="Sureste (Mérida)">Sureste (Mérida)</option>
+                <option value="Recepción">Recepción</option>
+                <option value="Proyectos Especiales">Proyectos Especiales</option>
+                <option value="Grafito">Grafito</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+          </form>
+        </div>
+
+        <div id="admin-tab" class="tab-content">
+          <form id="admin-form">
+            <div class="form-group">
+              <label for="username">Usuario:</label>
+              <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+              <label for="password">Contraseña:</label>
+              <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+          </form>
+        </div>
+
+      </div>
+
+
+    </div>
+
+    <footer class="app-footer">
+      <span>© 2026 — Desarrollo interno — R. Velasco</span>
+    </footer>
+    <script src="/tickets/public/auth.js"></script>
+  </body>
+
+</html>
+

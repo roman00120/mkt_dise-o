@@ -13,6 +13,6 @@ class UploadCommentAttachmentRequest extends FormRequest
 
     public function rules(): array
     {
-        return ['attachment' => ['required', 'file', 'max:15360', 'mimes:pdf,jpg,jpeg,png,webp,doc,docx,xls,xlsx,ppt,pptx,zip']];
+        return ['attachment' => ['required', 'file', 'max:102400']];
     }
 }

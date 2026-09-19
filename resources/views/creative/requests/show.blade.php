@@ -131,7 +131,7 @@
                     <section class="rounded border border-emerald-500/40 bg-slate-900 p-5">
                         <h2 class="text-lg font-semibold text-emerald-400">⚡ Subir Entregable a Marketing</h2>
                         <p class="mt-1 text-xs text-slate-400">Sube una o varias imágenes / archivos finales y envíalos directamente a revisión en 1 solo clic.</p>
-                        <form method="POST" action="{{ route('creative.requests.quick-deliverable', $creativeRequest) }}" enctype="multipart/form-data" class="mt-4 space-y-3">
+                        <form method="POST" action="{{ route('creative.requests.quick-deliverable', $creativeRequest) }}" enctype="multipart/form-data" data-max-bytes="104857600" class="js-upload-form mt-4 space-y-3">
                             @csrf
                             <div>
                                 <label class="block text-xs text-slate-300 font-medium">Imágenes / Archivos finales *</label>
@@ -141,6 +141,10 @@
                             <div>
                                 <label class="block text-xs text-slate-300 font-medium">Notas (opcional)</label>
                                 <textarea name="notes" rows="2" placeholder="Ej. Propuestas de diseño final adjuntas..." class="mt-1 block w-full text-xs text-slate-200 border border-slate-700 bg-slate-950 rounded p-2"></textarea>
+                            </div>
+                            <div data-upload-progress class="hidden" aria-live="polite">
+                                <div class="h-2 overflow-hidden rounded-full bg-slate-800"><div data-upload-progress-bar class="h-full w-0 rounded-full bg-emerald-500 transition-all duration-200"></div></div>
+                                <p data-upload-status class="mt-1 text-[11px] text-slate-400">Listo para subir.</p>
                             </div>
                             <button type="submit" class="w-full rounded bg-emerald-600 hover:bg-emerald-500 min-h-11 px-4 text-sm font-semibold text-white transition shadow">
                                 🚀 Subir y Enviar a Marketing
